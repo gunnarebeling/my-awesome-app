@@ -12,7 +12,7 @@ class ApiResponse<T> {
 
   ApiResponse({this.data, this.error, this.headers});
 
-  static Future parse(Response response) {
+  static Future<ApiResponse> parse(Response response) {
     dynamic parsedBody;
 
     try {
@@ -24,10 +24,10 @@ class ApiResponse<T> {
 
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       // success!
-      return Future.value(ApiResponse(data: parsedBody, headers: response.headers));
+      return Future<ApiResponse>.value(ApiResponse(data: parsedBody, headers: response.headers));
     } else {
       // failure!
-      return Future.error(ApiResponse(error: ApiError.fromJson(parsedBody, response.statusCode), headers: response.headers));
+      return Future<ApiResponse>.error(ApiResponse(error: ApiError.fromJson(parsedBody, response.statusCode), headers: response.headers));
     }
   }
 
@@ -55,10 +55,10 @@ class ApiResponse<T> {
   static Future<ApiResponse<List<E>>> Function(Response) parseToList<E>(List<E> Function(List) mapper) {
     return (Response response) => parse(response).then((parsedResponse) {
           List data;
-          if (parsedResponse is Map) {
-            data = parsedResponse.values.toList();
+          if (parsedResponse.data is Map) {
+            data = parsedResponse.data.values.toList();
           } else {
-            data = parsedResponse;
+            data = parsedResponse.data;
           }
           return ApiResponse<List<E>>(
             data: mapper(data),
