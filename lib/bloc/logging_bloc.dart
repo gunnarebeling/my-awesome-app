@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -52,9 +53,9 @@ class LoggingBloc {
       };
       _logs.add(telemetry);
 
-      // TODO: FirebaseCrashlytics.instance.log(pieces.join("\n"));
+      FirebaseCrashlytics.instance.log(pieces.join("\n"));
 
-      print(pieces.join("\n"));
+      print(pieces.join("\n")); // ignore: avoid_print
     });
 
     Connectivity().onConnectivityChanged.listen(_logConnectivity);
@@ -78,6 +79,8 @@ class LoggingBloc {
       }
     };
     _logs.add(telemetry);
+
+    // ignore: avoid_print
     print('(${DateTime.now()}) · Network · INFO: $method $url completed with $statusCode in ${endTime.difference(startTime).inMilliseconds / 1000}s');
   }
 

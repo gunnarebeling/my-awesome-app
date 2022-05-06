@@ -16,8 +16,9 @@ class ConfigBloc {
   final _logger = Logger('ConfigBloc');
 
   final Map<String, BehaviorSubject> _streams = {
-    AUTH_EMAIL: BehaviorSubject<String>.seeded(''),
-    AUTH_TOKEN: BehaviorSubject<String>.seeded(''),
+    kAuthEmail: BehaviorSubject<String>.seeded(''),
+    kAuthToken: BehaviorSubject<String>.seeded(''),
+    kAuthId: BehaviorSubject<String>.seeded(''),
   };
 
   ConfigBloc._internal();
@@ -26,13 +27,16 @@ class ConfigBloc {
     _streams.values.forEach((stream) => stream.close());
   }
 
-  init() async {
-    _logger.finest('init()');
-    final authEmail = await stringValueFor(AUTH_EMAIL);
-    if (authEmail != null) addToStream(AUTH_EMAIL, authEmail);
+  initialize() async {
+    _logger.finest('initialize()');
+    final authEmail = await stringValueFor(kAuthEmail);
+    if (authEmail != null) addToStream(kAuthEmail, authEmail);
 
-    final authToken = await stringValueFor(AUTH_TOKEN);
-    if (authToken != null) addToStream(AUTH_TOKEN, authToken);
+    final authToken = await stringValueFor(kAuthToken);
+    if (authToken != null) addToStream(kAuthToken, authToken);
+
+    final authId = await stringValueFor(kAuthId);
+    if (authId != null) addToStream(kAuthId, authId);
   }
 
   Stream streamFor(String key) {
@@ -66,6 +70,7 @@ class ConfigBloc {
     _streams[key]!.add(value);
   }
 
-  static const AUTH_TOKEN = "AUTH_TOKEN";
-  static const AUTH_EMAIL = "AUTH_EMAIL";
+  static const kAuthToken = "kAuthToken";
+  static const kAuthEmail = "kAuthEmail";
+  static const kAuthId = "kAuthId";
 }

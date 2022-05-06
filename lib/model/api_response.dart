@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:logging/logging.dart';
 
 import 'api_error.dart';
 
@@ -15,9 +16,9 @@ class ApiResponse<T> {
     dynamic parsedBody;
 
     try {
-      parsedBody = response.body != null && response.body.length > 0 ? json.decode(response.body) : {};
+      parsedBody = response.body.isNotEmpty ? json.decode(response.body) : {};
     } catch (error, stack) {
-      print('Failed to deserialize json: $stack');
+      Logger('ApiResponse').warning('Failed to deserialize json: $stack');
       parsedBody = {'error': 'Failed to properly deserialize response: $error'};
     }
 

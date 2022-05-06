@@ -22,4 +22,8 @@ class LoginApi {
         )
         .then(ApiResponse.parseToObject<User>(User.fromJson));
   }
+
+  Future<ApiResponse<User>> fetchCurrentUser() async {
+    return await _client.get(Uri.parse('$apiUrl/api/v1/me'), headers: await getDefaultHeaders()).then(ApiResponse.parseToObject<User>(User.fromJson));
+  }
 }
