@@ -6,10 +6,10 @@ class LoggingBloc {
   static var _instance = LoggingBloc._internal();
 
   factory LoggingBloc() => _instance;
-  List<Map> _logs = [];
+  final List<Map> _logs = [];
   List<Map> get logs => _logs;
 
-  BehaviorSubject<bool> _connectedSubject = BehaviorSubject<bool>();
+  final BehaviorSubject<bool> _connectedSubject = BehaviorSubject<bool>();
 
   Stream<bool> get connected => _connectedSubject.stream;
 

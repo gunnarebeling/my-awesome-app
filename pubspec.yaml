@@ -11,10 +11,13 @@ dependencies:
     sdk: flutter
   connectivity_plus:
   cupertino_icons: ^1.0.2
-  http:
-  logging:
-  rxdart:
-  shared_preferences:
+  firebase_analytics: ^9.1.7
+  firebase_crashlytics: ^2.7.2
+  http: ^0.13.4
+  logging: ^1.0.2
+  rxdart: ^0.27.3
+  shared_preferences: ^2.0.13
+  firebase_core: ^1.16.0
 
 dev_dependencies:
   flutter_test:
