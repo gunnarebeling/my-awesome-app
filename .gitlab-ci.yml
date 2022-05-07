@@ -1,0 +1,27 @@
+variables:
+  LC_ALL: "en_US.UTF-8"
+  LANG: "en_US.UTF-8"
+
+before_script:
+  - export FLUTTER_VERSION=$(cat .flutter-version)
+  - /usr/bin/env /bin/bash -c "cd ~/flutter; git fetch; git fetch twinsun; git checkout $FLUTTER_VERSION && flutter doctor"
+  - flutter pub get
+  - pod repo update
+  - flutter clean
+
+staging_android_firebase:
+  tags:
+    - flutter
+  only:
+    refs:
+      - main
+      - production
+      - feature/fastlane
+  stage: deploy
+  script:
+    #- echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+    #- echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+    #- echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
+    #- echo "storeFile=$(grealpath ~/.secrets/dev.twinsun.flutter-app-base.jks)" >> android/key.properties
+    - bin/deploy android_firebase staging $CI_PIPELINE_IID $BUILD_NAME_OVERRIDE
+  when: manual
