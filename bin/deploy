@@ -1,0 +1,46 @@
+#!/usr/bin/env /bin/bash
+set -e
+set -x
+
+platform=${1:-android}
+environment=${2:-staging}
+buildnumber=$3
+buildname=$4
+
+echo "Building $platform / $environment"
+
+flutterplatform='ios';
+flutteropts='--release --no-codesign';
+mainfile='lib/main.dart'
+
+if [ $platform == 'android' ]; then
+    flutterplatform='appbundle';
+    flutteropts='--release --target-platform android-arm,android-arm64,android-x64';
+elif [ $platform == 'android_firebase' ]; then
+    flutterplatform='apk';
+    flutteropts='--release';
+fi
+if [ $environment == 'production' ]; then
+    mainfile='lib/main-production.dart'
+fi
+if [ ! -z "$buildnumber" ]; then
+    flutteropts="$flutteropts --build-number $buildnumber";
+    export BUILD_NUMBER=$buildnumber
+fi
+if [ ! -z "$buildname" ]; then
+    flutteropts="$flutteropts --build-name $buildname";
+    export BUILD_NAME=$buildname;
+fi
+
+# TODO: add `--flavor $environment` here once flavors are set up
+flutter build $flutterplatform -t $mainfile $flutteropts;
+
+if [ $platform == 'android_firebase' ]; then
+    cd android;
+    environment="${environment}_firebase";
+else
+    cd $platform;
+fi
+
+bundle install;
+bundle exec fastlane $environment;
