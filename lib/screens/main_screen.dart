@@ -42,6 +42,12 @@ class MainScreen extends StatelessWidget {
                 },
                 child: const Text('Crash'),
               ),
+              TextButton(
+                onPressed: () {
+                  FirebaseCrashlytics.instance.recordError('Test Report', null);
+                },
+                child: const Text('Non-fatal Firebase Report'),
+              ),
             ],
           );
         },
