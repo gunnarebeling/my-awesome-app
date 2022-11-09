@@ -9,6 +9,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  String errorMessage = "";
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -21,6 +22,11 @@ class _LoginFormState extends State<LoginForm> {
         const Center(
           child: Text('Login Form'),
         ),
+        if (!errorMessage.isEmpty)
+          Text(
+            errorMessage,
+            style: TextStyle(color: Colors.red),
+          ),
         TextField(
           controller: _emailController,
           decoration: const InputDecoration(
@@ -36,7 +42,13 @@ class _LoginFormState extends State<LoginForm> {
         ),
         TextButton(
           onPressed: () {
-            LoginBloc().login(_emailController.text, _passwordController.text);
+            LoginBloc()
+                .login(_emailController.text, _passwordController.text)
+                .catchError((error) {
+              setState(() {
+                errorMessage = error.error.message;
+              });
+            });
           },
           child: const Text('Login'),
         ),

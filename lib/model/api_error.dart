@@ -8,7 +8,9 @@ class ApiError {
   factory ApiError.fromJson(Map json, int statusCode) {
     try {
       if (json.containsKey('errors')) {
-        var errorJson = json['errors'] is List ? (json['errors'] as List).first : json['errors'];
+        var errorJson = json['errors'] is List
+            ? (json['errors'] as List).first
+            : json['errors'];
         if (errorJson is String) {
           return ApiError(statusCode, errorJson);
         }
