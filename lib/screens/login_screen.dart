@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_base/bloc/login_bloc.dart';
 import 'package:flutter_app_base/screens/main_screen.dart';
@@ -39,14 +40,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //capturing screen dimensions using media query
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Center(
+        children: [
+          const Center(
             child: Text('Login Screen'),
           ),
-          LoginForm(),
+          //demonstrating using CachedNetworkImage with a default value
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+              child: SizedBox(
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.2,
+                child: CachedNetworkImage(
+                  imageUrl: 'https://twinsunsolutions.com/assets/images/home/nashville-skyline.jpg',
+                  placeholder: (context, url) => Image.asset('assets/loading.png'),
+                ),
+              ),
+            ),
+          ),
+          const LoginForm(),
         ],
       ),
     );
