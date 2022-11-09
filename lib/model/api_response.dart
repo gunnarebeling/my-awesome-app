@@ -72,7 +72,7 @@ class ApiResponse<T> {
   @override
   String toString() {
     if (error != null) {
-      return error!.message;
+      return error!.toString();
     } else {
       return data.toString();
     }

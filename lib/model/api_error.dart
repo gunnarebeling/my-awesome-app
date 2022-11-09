@@ -1,9 +1,9 @@
 class ApiError {
   final int statusCode;
   final String message;
-  final Map<String, dynamic>? detail;
+  final Map<String, dynamic>? details;
 
-  ApiError(this.statusCode, this.message, [this.detail]);
+  ApiError(this.statusCode, this.message, {this.details});
 
   factory ApiError.fromJson(Map json, int statusCode) {
     try {
@@ -13,6 +13,10 @@ class ApiError {
             : json['errors'];
         if (errorJson is String) {
           return ApiError(statusCode, errorJson);
+        }
+
+        if (errorJson is Map<String, dynamic>) {
+          return ApiError(statusCode, 'Error with Details', details: errorJson);
         }
 
         return ApiError(statusCode, 'Unknown Error');
@@ -28,5 +32,10 @@ class ApiError {
     } catch (err) {
       return ApiError(statusCode, err.toString());
     }
+  }
+
+  @override
+  String toString() {
+    return 'ApiError(statusCode: $statusCode, message: $message, details: $details)';
   }
 }

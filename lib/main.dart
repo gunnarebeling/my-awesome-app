@@ -13,7 +13,7 @@ void main() async {
   await LoggingBloc().initialize();
   await ConfigBloc().initialize();
 
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   runApp(const MyApp());
 }
