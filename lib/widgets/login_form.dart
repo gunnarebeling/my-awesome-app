@@ -42,9 +42,8 @@ class _LoginFormState extends State<LoginForm> {
         ),
         TextButton(
           onPressed: () {
-            LoginBloc()
-                .login(_emailController.text, _passwordController.text)
-                .catchError((error) {
+            _clearErrorMessage();
+            LoginBloc().login(_emailController.text, _passwordController.text).catchError((error) {
               setState(() {
                 errorMessage = error.error.message;
               });
@@ -54,5 +53,11 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ],
     );
+  }
+
+  void _clearErrorMessage() {
+    setState(() {
+      errorMessage = '';
+    });
   }
 }
