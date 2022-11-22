@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_base/bloc/config_bloc.dart';
 import 'package:flutter_app_base/bloc/logging_bloc.dart';
+import 'package:flutter_app_base/bloc/notification_bloc.dart';
 import 'package:flutter_app_base/firebase_options.dart';
 import 'package:flutter_app_base/screens/splash_screen.dart';
 
@@ -12,6 +13,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await LoggingBloc().initialize();
   await ConfigBloc().initialize();
+  await NotificationBloc().initialize();
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
