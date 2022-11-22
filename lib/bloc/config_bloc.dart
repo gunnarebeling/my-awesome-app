@@ -15,11 +15,7 @@ class ConfigBloc {
   final _repository = ConfigRepository();
   final _logger = Logger('ConfigBloc');
 
-  final Map<String, BehaviorSubject> _streams = {
-    kAuthEmail: BehaviorSubject<String>.seeded(''),
-    kAuthToken: BehaviorSubject<String>.seeded(''),
-    kAuthId: BehaviorSubject<String>.seeded(''),
-  };
+  final Map<String, BehaviorSubject> _streams = {};
 
   ConfigBloc._internal();
 
@@ -29,14 +25,14 @@ class ConfigBloc {
 
   initialize() async {
     _logger.finest('initialize()');
-    final authEmail = await stringValueFor(kAuthEmail);
-    if (authEmail != null) addToStream(kAuthEmail, authEmail);
+    String? authEmail = await stringValueFor(kAuthEmail);
+    _streams[kAuthEmail] = BehaviorSubject<String>.seeded(authEmail ?? "");
 
-    final authToken = await stringValueFor(kAuthToken);
-    if (authToken != null) addToStream(kAuthToken, authToken);
+    String? authToken = await stringValueFor(kAuthToken);
+    _streams[kAuthToken] = BehaviorSubject<String>.seeded(authToken ?? "");
 
-    final authId = await stringValueFor(kAuthId);
-    if (authId != null) addToStream(kAuthId, authId);
+    String? authId = await stringValueFor(kAuthId);
+    _streams[kAuthId] = BehaviorSubject<String>.seeded(authId ?? "");
   }
 
   Stream streamFor(String key) {
