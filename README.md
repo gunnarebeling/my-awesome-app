@@ -18,3 +18,24 @@ Set up Firebase deployments (for Android), TestFlight (for iOS), and the Play St
 Make sure your keystore and signing certificates make it to the build agent (ask Jami about this).
 
 Run deployment jobs through GitLab CI/CD.
+
+Video walkthrough setting up deployments for iOS: https://drive.google.com/file/d/1sssT5mVUKI57BXGD-DPuTHxzhe4f69X5/view?usp=share_link
+
+### Code Signing
+
+#### Android
+
+1. Add keystore to Gitlab Secure Files for android.
+2. Update .gitlab-ci.yml with appropriate values.
+
+#### iOS
+
+1. Create your app in App Store Connect.
+2. Update Fastfile, Appfile, Matchfile in ios/fastlane as needed.
+3. Generate signing certs and profiles as needed:
+
+```
+cd ios
+PRIVATE_TOKEN="<your gitlab token here>" bundle exec fastlane match development
+PRIVATE_TOKEN="<your gitlab token here>" bundle exec fastlane match appstore
+```

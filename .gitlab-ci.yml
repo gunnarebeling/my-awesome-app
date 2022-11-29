@@ -2,26 +2,52 @@ variables:
   LC_ALL: "en_US.UTF-8"
   LANG: "en_US.UTF-8"
 
-before_script:
+.prepare-ios: &prepare-ios
   - export FLUTTER_VERSION=$(cat .flutter-version)
-  - /usr/bin/env /bin/bash -c "cd ~/flutter; git fetch; git fetch twinsun; git checkout $FLUTTER_VERSION && flutter doctor"
-  - flutter pub get
+  - export FLUTTER_COMMAND=flutter
+  - command -v fvm && export FLUTTER_COMMAND="fvm flutter"
+  - command -v fvm || /usr/bin/env /bin/bash -c "cd ~/flutter; git fetch; git fetch twinsun; git checkout $FLUTTER_VERSION && flutter doctor"
+  - $FLUTTER_COMMAND pub get
   - pod repo update
+  - $FLUTTER_COMMAND clean
+
+.prepare-android: &prepare-android
+  - change-flutter-version $(cat .flutter-version)
+  - flutter pub get
   - flutter clean
+  - curl -s https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/load-secure-files/-/raw/main/installer | bash
+  #- echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+  #- echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+  #- echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
+  #- echo "storeFile=$(pwd)/.secure_files/dev.twinsun.flutter-app-base.jks" >> android/key.properties
 
 staging_android_firebase:
+  tags:
+    - saas-linux-large-amd64
+  image: twinsunllc/android-flutter
+  only:
+    refs:
+      - main
+      - production
+      - feature/ios-deploy
+  stage: deploy
+  script:
+    - *prepare-android
+    - bin/deploy android_firebase staging $CI_PIPELINE_IID $BUILD_NAME_OVERRIDE
+  when: manual
+
+staging_ios:
   tags:
     - flutter
   only:
     refs:
       - main
       - production
-      - feature/fastlane
+      - feature/ios-deploy
   stage: deploy
+  variables:
+    PILOT_APPLE_ID: 6444778107
   script:
-    #- echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
-    #- echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
-    #- echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
-    #- echo "storeFile=$(grealpath ~/.secrets/dev.twinsun.flutter-app-base.jks)" >> android/key.properties
-    - bin/deploy android_firebase staging $CI_PIPELINE_IID $BUILD_NAME_OVERRIDE
+    - *prepare-ios
+    - bin/deploy ios staging "$CI_PIPELINE_IID" "$BUILD_NAME_OVERRIDE"
   when: manual
