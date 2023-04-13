@@ -1,0 +1,27 @@
+name: Staging Deployments
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  staging_ios:
+    uses: ./.github/workflows/ios.yml
+    needs: test
+    secrets: inherit
+    with:
+      pilot_apple_id: 6444778107
+      flavor: staging
+
+  staging_android_firebase:
+    uses: ./.github/workflows/android.yml
+    needs: test
+    secrets: inherit
+    with:
+      flavor: staging
+      platform: android_firebase
+      supply_package_name: dev.twinsun.flutter_app_base.staging

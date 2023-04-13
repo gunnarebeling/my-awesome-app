@@ -1,0 +1,34 @@
+name: Production iOS Deployment
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - production
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  production_ios:
+    uses: ./.github/workflows/ios.yml
+    needs: test
+    secrets: inherit
+    with:
+      pilot_apple_id: 6444778107
+      flavor: production
+  production_android_firebase:
+    uses: ./.github/workflows/android.yml
+    needs: test
+    secrets: inherit
+    with:
+      flavor: production
+      platform: android_firebase
+      supply_package_name: dev.twinsun.flutter-app-base
+  production_android_store:
+    uses: ./.github/workflows/android.yml
+    needs: test
+    secrets: inherit
+    with:
+      flavor: production
+      platform: android
+      supply_package_name: dev.twinsun.flutter-app-base
