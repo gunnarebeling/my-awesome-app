@@ -1,0 +1,47 @@
+name: Android Builds
+
+on:
+  workflow_call:
+    inputs:
+      supply_package_name:
+        description: 'Package name of the android app'
+        required: true
+        type: string
+      flavor:
+        description: 'Flavor to use'
+        required: true
+        type: string
+      platform:
+        description: 'Platform to use, android or android_firebase'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: twinsunllc/android-flutter
+    timeout-minutes: 30
+    env:
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      SUPPLY_PACKAGE_NAME: ${{ inputs.supply_package_name }}
+      ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+      ANDROID_KEY_ALIAS: ${{ vars.ANDROID_KEY_ALIAS }}
+      ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
+      FLAVOR: ${{ inputs.flavor }}
+      PLATFORM: ${{ inputs.platform }}
+    steps:
+    - uses: actions/checkout@v3.5.0
+    - run: change-flutter-version $(cat .flutter-version)
+    - run: flutter pub get
+    - run: flutter clean
+    - run: echo $ANDROID_KEYSTORE | base64 -di > keystore.jks
+    - run: echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+    - run: echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+    - run: echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
+    - run: echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
+    - run: bin/deploy $PLATFORM $FLAVOR $GITHUB_RUN_NUMBER $BUILD_NAME_OVERRIDE

@@ -1,0 +1,45 @@
+name: iOS Builds
+
+on:
+  workflow_call:
+    inputs:
+      pilot_apple_id:
+        description: 'Apple ID for the app'
+        required: true
+        type: string
+      flavor:
+        description: 'Flavor to use'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    env:
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      PILOT_USERNAME: admin@twinsunsolutions.com
+      PILOT_APP_IDENTIFIER: dev.twinsun.flutter-app-base
+      PILOT_TEAM_ID: N/A - There is no value for REPLACE_ME_PILOT_TEAM_ID in the .gitlab-ci
+      PILOT_DEV_PORTAL_TEAM_ID: N/A - There is no value for REPLACE_ME_DEV_PORTAL_TEAM_ID in the .gitlab
+      PILOT_APPLE_ID: ${{ inputs.pilot_apple_id }}
+      FLAVOR: ${{ inputs.flavor }}
+      FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+      KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+    steps:
+    - uses: actions/checkout@v3.5.0
+    - uses: dart-lang/setup-dart@v1
+      with:
+        channel: stable
+        version: 2.18.4
+    - run: echo "FLUTTER_VERSION=$(cat .flutter-version)" >> $GITHUB_ENV
+    - run: dart pub global activate fvm
+    - run: fvm install $FLUTTER_VERSION
+    - run: fvm use $FLUTTER_VERSION
+    - run: fvm flutter pub get
+    - run: pod repo update
+    - run: fvm flutter clean
+    - run: bin/deploy ios $FLAVOR "$GITHUB_RUN_NUMBER" "$BUILD_NAME_OVERRIDE"
