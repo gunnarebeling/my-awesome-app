@@ -23,7 +23,7 @@ class LoginBloc {
 
   final LoginApi _api = LoginApi();
 
-  final BehaviorSubject<User?> _userSubject = BehaviorSubject<User?>();
+  final BehaviorSubject<User?> _userSubject = BehaviorSubject<User?>.seeded(null);
   Stream<User?> get currentUser => _userSubject.stream;
 
   Logger get _log => Logger('LoginBloc');

@@ -1,7 +1,11 @@
 PODS:
+  - battery_plus (1.0.0):
+    - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
     - ReachabilitySwift
+  - device_info_plus (0.0.1):
+    - Flutter
   - Firebase/Analytics (10.9.0):
     - Firebase/Core
   - Firebase/Core (10.9.0):
@@ -140,6 +144,8 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -155,13 +161,16 @@ PODS:
     - FMDB (>= 2.7.5)
 
 DEPENDENCIES:
+  - battery_plus (from `.symlinks/plugins/battery_plus/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -187,8 +196,12 @@ SPEC REPOS:
     - ReachabilitySwift
 
 EXTERNAL SOURCES:
+  battery_plus:
+    :path: ".symlinks/plugins/battery_plus/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
@@ -201,6 +214,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
@@ -209,7 +224,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  battery_plus: 9bff772a7e5e4d5381ca3ca92a97373a3d8b2738
   connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
+  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   Firebase: bd152f0f3d278c4060c5c71359db08ebcfd5a3e2
   firebase_analytics: 24c9089f960ea2255654488d219cb15a913adf8e
   firebase_core: fc68c0f9eec4e800b9418deff14a7e0a504016f3
@@ -230,6 +247,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959

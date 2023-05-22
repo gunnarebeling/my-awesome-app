@@ -9,7 +9,8 @@
 5. Find all occurrences of `FlutterAppBase`, `flutterAppBase`, `flutter-app-base`, and `flutter_app_base` and replace them with e.g. `MyAwesomeApp`, `myAwesomeApp`, `my-awesome-app` and `my_awesome_app`
 6. Change the bundle identifier and relevant kotlin package path names (`dev/twinsun/flutter_app_base` to `your/package/path`).
 7. Update the google-services.json and android/fastlane/Fastfile to point to the correct Firebase apps.
-8. Commit the result and push.
+8. Update the Critic key in `lib/bloc/critic_bloc.dart` to your app.
+9. Commit the result and push.
 
 ## Development
 
