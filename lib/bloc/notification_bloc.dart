@@ -75,6 +75,7 @@ class NotificationBloc {
   Future<void> unregisterDevice() async {
     return _api.unregister(await _firebaseMessaging.getToken() ?? '').then((_) {
       _log.info('Unregister device: success!');
+      return Future.value();
     }).catchError((error, stackTrace) {
       _log.severe('Unregister device: failure!', error, stackTrace);
       return Future.error(error, stackTrace);
@@ -134,6 +135,7 @@ class NotificationBloc {
   void _registerDevice(String token) {
     _api.register(token).then((_) {
       _log.info('Register device: success!');
+      return Future.value();
     }).catchError((error, stackTrace) {
       _log.severe('Register device: failure!', error, stackTrace);
       return Future.error(error, stackTrace);
