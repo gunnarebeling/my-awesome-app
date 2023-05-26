@@ -21,7 +21,7 @@ jobs:
         run: |
           git config --global --add safe.directory /home/flutter/flutter-sdk
           dart pub global activate fvm
-          echo "export PATH=\"$PATH\":\"$HOME/.pub-cache/bin\"" >> $GITHUB_ENV
+          echo "${HOME}/.pub-cache/bin" >> $GITHUB_ENV
       - name: Setup Flutter
         run: |
           fvm install $(cat .flutter-version)
