@@ -8,7 +8,7 @@ import 'package:inventiv_critic_flutter/critic.dart';
 import 'package:inventiv_critic_flutter/modal/bug_report.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
+import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart'; // ignore: depend_on_referenced_packages
 
 import 'critic_bloc_test.mocks.dart';
 
@@ -31,7 +31,7 @@ void main() {
     // Setup
     final criticBloc = CriticBloc();
     final mockCritic = MockCritic();
-    criticBloc.instance = CriticBloc()..critic = mockCritic;
+    CriticBloc().critic = mockCritic;
     const description = 'Test description';
 
     // Mock the submitReport method

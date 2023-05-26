@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3.5.0
       - name: Setup FVM
-        run: pub global activate fvm
+        run: dart pub global activate fvm
       - name: Setup Flutter
         run: |
           fvm install $(cat .flutter-version)

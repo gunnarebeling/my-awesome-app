@@ -33,7 +33,7 @@ void main() {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return CriticReportDialog();
+                    return const CriticReportDialog();
                   },
                 );
               },
@@ -66,7 +66,7 @@ void main() {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return CriticReportDialog();
+                    return const CriticReportDialog();
                   },
                 );
               },
@@ -110,7 +110,7 @@ void main() {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return CriticReportDialog();
+                    return const CriticReportDialog();
                   },
                 );
               },
@@ -158,7 +158,7 @@ void main() {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return CriticReportDialog();
+                    return const CriticReportDialog();
                   },
                 );
               },
@@ -178,7 +178,7 @@ void main() {
 
     // Tap on the Submit button
     await tester.tap(find.text('Submit'));
-    await tester.pump(Duration(milliseconds: 100));
+    await tester.pump(const Duration(milliseconds: 100));
 
     // Check if CircularProgressIndicator is displayed
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -202,7 +202,7 @@ void main() {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return CriticReportDialog();
+                    return const CriticReportDialog();
                   },
                 );
               },
@@ -236,7 +236,7 @@ void main() {
                 showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return CriticReportDialog();
+                    return const CriticReportDialog();
                   },
                 );
               },
