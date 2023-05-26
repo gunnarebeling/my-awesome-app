@@ -1,0 +1,31 @@
+name: Tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+
+env:
+  LC_ALL: "en_US.UTF-8"
+  LANG: "en_US.UTF-8"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: twinsunllc/flutter
+      options: --user root
+    steps:
+      - uses: actions/checkout@v3.5.0
+      - name: Setup FVM
+        run: pub global activate fvm
+      - name: Setup Flutter
+        run: |
+          fvm install $(cat .flutter-version)
+          fvm use $(cat .flutter-version)
+      - name: Install dependencies
+        run: fvm flutter pub get
+      - name: Generate mocks
+        run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Run tests
+        run: fvm flutter test
