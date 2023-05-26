@@ -6,12 +6,23 @@ platform=${1:-android}
 environment=${2:-staging}
 buildnumber=$3
 buildname=$4
+command="flutter"
+flutterVersion=$(cat .flutter-version);
 
 echo "Building $platform / $environment"
 
 flutterplatform='ios';
 flutteropts='--release --no-codesign';
 mainfile='lib/main.dart'
+
+if command -v fvm; then
+    echo 'Using fvm';
+    command='fvm flutter';
+    [ -d $HOME/fvm/versions/$flutterVersion ] || /usr/bin/env /bin/bash -c "cd $HOME/fvm/versions; git clone -b $flutterVersion https://github.com/flutter/flutter $flutterVersion";
+    fvm list;
+    fvm use $flutterVersion;
+    fvm flutter doctor;
+fi
 
 if [ $platform == 'android' ]; then
     flutterplatform='appbundle';
@@ -33,7 +44,7 @@ if [ ! -z "$buildname" ]; then
 fi
 
 # TODO: add `--flavor $environment` here once flavors are set up
-flutter build $flutterplatform -t $mainfile $flutteropts;
+$command build $flutterplatform -t $mainfile $flutteropts;
 
 if [ $platform == 'android_firebase' ]; then
     cd android;

@@ -9,21 +9,24 @@ import 'package:inventiv_critic_flutter/modal/bug_report.dart';
 import 'package:logging/logging.dart';
 
 class CriticBloc {
-  static var _instance = CriticBloc._internal();
+  static var _instance = CriticBloc.internal();
 
   @visibleForTesting
-  set instance(CriticBloc bloc) {
+  static set instance(CriticBloc bloc) {
     _instance = bloc;
   }
 
   static void reset() {
     _instance.dispose();
-    _instance = CriticBloc._internal();
+    _instance = CriticBloc.internal();
   }
 
   factory CriticBloc() => _instance;
 
-  CriticBloc._internal();
+  Critic critic;
+
+  @visibleForTesting
+  CriticBloc.internal({Critic? critic}) : critic = critic ?? Critic();
 
   Logger get _log => Logger('CriticBloc');
 
@@ -54,7 +57,7 @@ class CriticBloc {
 
     report.attachments!.add(Attachment(name: 'logs.txt', path: tempFile.path));
 
-    return await Critic().submitReport(report);
+    return await critic.submitReport(report);
   }
 
   void dispose() {}

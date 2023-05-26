@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_app_base/bloc/config_bloc.dart';
 
-const String apiUrl = 'https://holonet-api.herokuapp.com';
+const String apiUrl = 'http://localhost:3000';
 
 Future<String> getAuthHeader() async {
   String email = await ConfigBloc().streamFor(ConfigBloc.kAuthEmail).first;

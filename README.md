@@ -18,6 +18,8 @@
 2. Install the flutter version for this project: `fvm install $(cat .flutter-version)`
 3. Use this flutter version: `fvm use $(cat .flutter-version)`
 4. Run the app using vscode or `fvm flutter run`
+5. Generate mocks with `fvm flutter pub run build_runner build`
+6. Run tests with `fvm flutter test`
 
 ## Deployment
 
