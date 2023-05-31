@@ -48,6 +48,19 @@ class _CriticReportDialogState extends State<CriticReportDialog> {
     }
   }
 
+  Widget _buildButtonChild() {
+    if (_submitting) {
+      return const SizedBox(
+        height: 16.0,
+        width: 16.0,
+        child: CircularProgressIndicator(
+          strokeWidth: 2.0,
+        ),
+      );
+    }
+    return const Text('Submit');
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -70,23 +83,12 @@ class _CriticReportDialogState extends State<CriticReportDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: _submitting
-              ? null
-              : () {
-                  Navigator.of(context).pop();
-                },
+          onPressed: _submitting ? null : () => Navigator.of(context).pop(),
           child: const Text('Cancel'),
         ),
         TextButton(
           onPressed: _submitting ? null : _submitReport,
-          child: _submitting
-              ? const SizedBox(
-                  height: 16.0,
-                  width: 16.0,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.0,
-                  ))
-              : const Text('Submit'),
+          child: _buildButtonChild(),
         ),
       ],
     );
