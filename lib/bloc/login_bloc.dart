@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_app_base/api/login_api.dart';
 import 'package:flutter_app_base/bloc/config_bloc.dart';
 import 'package:flutter_app_base/model/api_response.dart';
@@ -8,22 +9,42 @@ import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc {
-  static final LoginBloc _instance = LoginBloc._internal();
+  static LoginBloc _instance = LoginBloc.internal();
+
+  @visibleForTesting
+  static set instance(LoginBloc v) {
+    _instance = v;
+  }
 
   factory LoginBloc() {
     return _instance;
   }
 
-  LoginBloc._internal() {
+  @visibleForTesting
+  LoginBloc.internal({LoginApi? api}) : _api = api ?? LoginApi() {
     currentUser.listen((User? user) {
-      FirebaseCrashlytics.instance.setUserIdentifier(user?.id ?? '');
-      FirebaseAnalytics.instance.setUserId(id: user?.id ?? '');
+      _firebaseCrashlytics.setUserIdentifier(user?.id ?? '');
+      _firebaseAnalytics.setUserId(id: user?.id ?? '');
     });
   }
 
-  final LoginApi _api = LoginApi();
+  static FirebaseCrashlytics _firebaseCrashlytics = FirebaseCrashlytics.instance;
 
-  final BehaviorSubject<User?> _userSubject = BehaviorSubject<User?>();
+  @visibleForTesting
+  static set firebaseCrashlytics(FirebaseCrashlytics value) {
+    _firebaseCrashlytics = value;
+  }
+
+  static FirebaseAnalytics _firebaseAnalytics = FirebaseAnalytics.instance;
+
+  @visibleForTesting
+  static set firebaseAnalytics(FirebaseAnalytics value) {
+    _firebaseAnalytics = value;
+  }
+
+  LoginApi _api = LoginApi();
+
+  final BehaviorSubject<User?> _userSubject = BehaviorSubject<User?>.seeded(null);
   Stream<User?> get currentUser => _userSubject.stream;
 
   Logger get _log => Logger('LoginBloc');

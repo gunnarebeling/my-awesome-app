@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_base/bloc/login_bloc.dart';
+import 'package:flutter_app_base/model/user.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -22,10 +23,10 @@ class _LoginFormState extends State<LoginForm> {
         const Center(
           child: Text('Login Form'),
         ),
-        if (!errorMessage.isEmpty)
+        if (errorMessage.isNotEmpty)
           Text(
             errorMessage,
-            style: TextStyle(color: Colors.red),
+            style: const TextStyle(color: Colors.red),
           ),
         TextField(
           controller: _emailController,
@@ -47,6 +48,7 @@ class _LoginFormState extends State<LoginForm> {
               setState(() {
                 errorMessage = error.error.message;
               });
+              return Future<User>.error(error);
             });
           },
           child: const Text('Login'),

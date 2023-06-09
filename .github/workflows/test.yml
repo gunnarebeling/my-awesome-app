@@ -4,8 +4,6 @@ on:
   workflow_dispatch:
   workflow_call:
   pull_request:
-    branches:
-      - main
 
 env:
   LC_ALL: "en_US.UTF-8"
@@ -18,9 +16,19 @@ jobs:
       image: twinsunllc/flutter
       options: --user root
     steps:
-    - uses: actions/checkout@v3.5.0
-    - run: echo "FLUTTER_VERSION=$(cat .flutter-version)" >> $GITHUB_ENV
-    - run: git config --global --add safe.directory /home/flutter/flutter-sdk
-    - run: /usr/bin/env /bin/bash -c "cd /home/flutter/flutter-sdk; git fetch origin; git fetch twinsunllc; git checkout $FLUTTER_VERSION && flutter doctor"
-    - run: flutter pub get
-    - run: flutter test
+      - uses: actions/checkout@v3.5.0
+      - name: Setup FVM
+        run: |
+          git config --global --add safe.directory /home/flutter/flutter-sdk
+          dart pub global activate fvm
+          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
+      - name: Setup Flutter
+        run: |
+          fvm install $(cat .flutter-version)
+          fvm use $(cat .flutter-version)
+      - name: Install dependencies
+        run: fvm flutter pub get
+      - name: Generate mocks
+        run: fvm flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Run tests
+        run: fvm flutter test

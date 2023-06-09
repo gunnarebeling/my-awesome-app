@@ -9,7 +9,17 @@
 5. Find all occurrences of `FlutterAppBase`, `flutterAppBase`, `flutter-app-base`, and `flutter_app_base` and replace them with e.g. `MyAwesomeApp`, `myAwesomeApp`, `my-awesome-app` and `my_awesome_app`
 6. Change the bundle identifier and relevant kotlin package path names (`dev/twinsun/flutter_app_base` to `your/package/path`).
 7. Update the google-services.json and android/fastlane/Fastfile to point to the correct Firebase apps.
-8. Commit the result and push.
+8. Update the Critic key in `lib/bloc/critic_bloc.dart` to your app.
+9. Commit the result and push.
+
+## Development
+
+1. Install FVM if you haven't already: `dart pub global activate fvm`
+2. Install the flutter version for this project: `fvm install $(cat .flutter-version)`
+3. Use this flutter version: `fvm use $(cat .flutter-version)`
+4. Run the app using vscode or `fvm flutter run`
+5. Generate mocks with `fvm flutter pub run build_runner build`
+6. Run tests with `fvm flutter test`
 
 ## Deployment
 

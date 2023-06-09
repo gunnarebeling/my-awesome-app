@@ -19,10 +19,6 @@ class ConfigBloc {
 
   ConfigBloc._internal();
 
-  dispose() {
-    _streams.values.forEach((stream) => stream.close());
-  }
-
   initialize() async {
     _logger.finest('initialize()');
     String? authEmail = await stringValueFor(kAuthEmail);
@@ -33,6 +29,14 @@ class ConfigBloc {
 
     String? authId = await stringValueFor(kAuthId);
     _streams[kAuthId] = BehaviorSubject<String>.seeded(authId ?? "");
+  }
+
+  dispose() {
+    _streams.values.forEach(_closeSubject);
+  }
+
+  void _closeSubject(Subject subject) {
+    subject.close();
   }
 
   Stream streamFor(String key) {
