@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_app_base/api/api.dart';
+import 'package:flutter_app_base/api/client.dart';
 import 'package:flutter_app_base/model/api_response.dart';
-import 'package:http/http.dart' as http;
 
 class DeviceApi {
-  http.Client get _client => http.Client();
+  AppHttpClient get _client => AppHttpClient();
 
   Future<ApiResponse> register(String deviceToken) async {
     return await _client

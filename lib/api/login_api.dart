@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter_app_base/api/api.dart';
+import 'package:flutter_app_base/api/client.dart';
 import 'package:flutter_app_base/model/api_response.dart';
 import 'package:flutter_app_base/model/user.dart';
-import 'package:http/http.dart' as http;
 
 class LoginApi {
-  http.Client get _client => http.Client();
+  AppHttpClient get _client => AppHttpClient();
 
   Future<ApiResponse<User>> login(String email, String password) async {
     return await _client
