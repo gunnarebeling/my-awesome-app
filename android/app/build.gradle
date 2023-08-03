@@ -21,6 +21,17 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def buildVersionCode = {
+    def (major, minor, patch) = flutterVersionName.tokenize('.')
+    def code = flutterVersionCode
+    (major, minor, patch, code) = [major, minor, patch, code].collect{it.toInteger()}
+    if (major >= 21) { throw new GradleException("Major version cannot exceed 20") }
+    if (minor >= 100) { throw new GradleException("Minor version cannot exceed 99") }
+    if (patch >= 100) { throw new GradleException("Patch version cannot exceed 99") }
+    if (code >= 10000) { throw new GradleException("Build number cannot exceed 9999") }
+    (major * 100000000) + (minor * 1000000) + (patch * 10000) + code;
+}
+
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
 apply plugin: 'com.google.gms.google-services'
@@ -50,7 +61,7 @@ android {
         applicationId "dev.twinsun.flutter_app_base"
         minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
+        versionCode buildVersionCode()
         versionName flutterVersionName
         multiDexEnabled true
     }

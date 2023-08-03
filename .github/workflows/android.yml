@@ -36,6 +36,8 @@ jobs:
       PLATFORM: ${{ inputs.platform }}
     steps:
     - uses: actions/checkout@v3.5.0
+    - uses: ./.github/workflows/find_build_number
+      id: find_build_number
     - run: change-flutter-version $(cat .flutter-version)
     - run: flutter pub get
     - run: flutter clean
@@ -44,4 +46,4 @@ jobs:
     - run: echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
     - run: echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
     - run: echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
-    - run: bin/deploy $PLATFORM $FLAVOR $GITHUB_RUN_NUMBER $BUILD_NAME_OVERRIDE
+    - run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
