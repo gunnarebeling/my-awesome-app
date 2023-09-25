@@ -5,6 +5,11 @@ import 'package:logging/logging.dart';
 
 import 'api_error.dart';
 
+/// A response from an API call.
+///
+/// The [data] field contains the parsed response body.
+///
+/// The [error] field contains an [ApiError] if the response was not successful.
 class ApiResponse<T> {
   final T? data;
   final Map<String, String>? headers;
@@ -12,6 +17,10 @@ class ApiResponse<T> {
 
   ApiResponse({this.data, this.error, this.headers});
 
+  /// Parses a [Response] to an [ApiResponse].
+  ///
+  /// If the response is successful, the [ApiResponse] will contain the parsed [Response.body] as [ApiResponse.data].
+  /// If the response is not successful, the [ApiResponse] will contain an [ApiError] as [ApiResponse.error].
   static Future<ApiResponse> parse(Response response) {
     dynamic parsedBody;
 
@@ -41,6 +50,19 @@ class ApiResponse<T> {
     }
   }
 
+  /// Returns a function that parses a response to an object.
+  ///
+  /// The [mapper] function is used to map the object to [E].
+  ///
+  /// Pass a [Response] into the returned function to parse the response.
+  ///
+  /// For example, to parse a [User] object:
+  /// ```
+  /// Future<ApiResponse<User>> fetchCurrentUser() async {
+  ///  return await _client.get(Uri.parse('$apiUrl/api/v1/me'), headers: await getDefaultHeaders())
+  ///      .then(ApiResponse.parseToObject<User>(User.fromJson));
+  /// }
+  /// ```
   static Future<ApiResponse<E>> Function(Response) parseToObject<E>(E Function(Map<String, dynamic>) mapper) {
     return (Response response) => parse(response).then((parsedResponse) {
           return ApiResponse<E>(
@@ -52,6 +74,19 @@ class ApiResponse<T> {
         });
   }
 
+  /// Returns a function that parses a response to a list of objects.
+  ///
+  /// The [mapper] function is used to map the list of objects to a list of [E].
+  ///
+  /// Pass a [Response] into the returned function to parse the response.
+  ///
+  /// For example, to parse a list of [User] objects:
+  /// ```
+  /// Future<ApiResponse<List<User>>> fetchUsers() async {
+  ///  return await _client.get(Uri.parse('$apiUrl/api/v1/users'), headers: await getDefaultHeaders())
+  ///        .then(ApiResponse.parseToList<User>(User.fromJson));
+  /// }
+  /// ```
   static Future<ApiResponse<List<E>>> Function(Response) parseToList<E>(List<E> Function(List) mapper) {
     return (Response response) => parse(response).then((parsedResponse) {
           List data;
