@@ -4,7 +4,7 @@ import 'package:flutter_app_base/screens/login_screen.dart';
 import 'package:flutter_app_base/screens/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();

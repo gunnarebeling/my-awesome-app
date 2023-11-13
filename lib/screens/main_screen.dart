@@ -5,7 +5,7 @@ import 'package:flutter_app_base/model/user.dart';
 import 'package:flutter_app_base/screens/login_screen.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
