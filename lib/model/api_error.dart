@@ -1,36 +1,28 @@
+typedef Json = Map<String, dynamic>;
+
 class ApiError {
   final int statusCode;
   final String message;
   final Map<String, dynamic>? details;
 
-  ApiError(this.statusCode, this.message, {this.details});
+  ApiError(
+    this.statusCode,
+    this.message, {
+    this.details,
+  });
 
-  factory ApiError.fromJson(Map json, int statusCode) {
-    try {
-      if (json.containsKey('errors')) {
-        var errorJson = json['errors'] is List
-            ? (json['errors'] as List).first
-            : json['errors'];
-        if (errorJson is String) {
-          return ApiError(statusCode, errorJson);
-        }
+  factory ApiError.fromJson(Json json, int statusCode) {
+    var errors = json['errors'] is List //
+        ? json['errors'].first
+        : json['errors'];
+    final error = errors ?? json['error'];
 
-        if (errorJson is Map<String, dynamic>) {
-          return ApiError(statusCode, 'Error with Details', details: errorJson);
-        }
-
-        return ApiError(statusCode, 'Unknown Error');
-      } else if (json.toString().contains('error')) {
-        var errorJson = json['error'];
-        if (errorJson is String) {
-          return ApiError(statusCode, errorJson);
-        }
-        return ApiError(statusCode, 'Unknown Error');
-      } else {
-        return ApiError(statusCode, 'Unknown API error');
-      }
-    } catch (err) {
-      return ApiError(statusCode, err.toString());
+    if (error is String) {
+      return ApiError(statusCode, error);
+    } else if (error is Json) {
+      return ApiError(error['code'], 'Error with Details', details: error);
+    } else {
+      return ApiError(500, 'Unknown API error');
     }
   }
 
