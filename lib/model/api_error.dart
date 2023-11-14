@@ -22,7 +22,7 @@ class ApiError {
     } else if (error is Json) {
       return ApiError(error['code'], 'Error with Details', details: error);
     } else {
-      return ApiError(500, 'Unknown API error');
+      return ApiError(statusCode, 'Unknown API error');
     }
   }
 
