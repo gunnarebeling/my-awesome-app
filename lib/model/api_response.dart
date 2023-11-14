@@ -27,7 +27,7 @@ class ApiResponse<T> {
     try {
       parsedBody = response.body.isNotEmpty ? json.decode(response.body) : {};
     } catch (error, stack) {
-      Logger('ApiResponse').warning('Failed to deserialize json: $stack');
+      Logger('ApiResponse').warning('Failed to deserialize json.', error, stack);
       parsedBody = {'error': 'Failed to properly deserialize response: $error'};
     }
 
@@ -46,7 +46,7 @@ class ApiResponse<T> {
       return Future.value(true);
     } else {
       // failure!
-      return Future.error(ApiResponse(error: ApiError(response.statusCode, 'An Error Occured')));
+      return Future.error(ApiResponse(error: ApiError(response.statusCode, 'An Error Occurred.')));
     }
   }
 
@@ -105,11 +105,5 @@ class ApiResponse<T> {
   }
 
   @override
-  String toString() {
-    if (error != null) {
-      return error!.toString();
-    } else {
-      return data.toString();
-    }
-  }
+  String toString() => error?.toString() ?? data.toString();
 }
