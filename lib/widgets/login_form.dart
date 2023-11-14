@@ -3,7 +3,7 @@ import 'package:flutter_app_base/bloc/login_bloc.dart';
 import 'package:flutter_app_base/model/user.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  const LoginForm({super.key});
 
   @override
   State<LoginForm> createState() => _LoginFormState();

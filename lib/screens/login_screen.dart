@@ -8,7 +8,7 @@ import 'package:flutter_app_base/widgets/critic_report_dialog.dart';
 import 'package:flutter_app_base/widgets/login_form.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

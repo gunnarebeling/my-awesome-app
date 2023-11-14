@@ -3,7 +3,7 @@ import 'package:flutter_app_base/bloc/critic_bloc.dart';
 import 'package:logging/logging.dart';
 
 class CriticReportDialog extends StatefulWidget {
-  const CriticReportDialog({Key? key}) : super(key: key);
+  const CriticReportDialog({super.key});
 
   @override
   State<CriticReportDialog> createState() => _CriticReportDialogState();
