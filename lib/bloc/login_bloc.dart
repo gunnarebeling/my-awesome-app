@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -77,11 +79,14 @@ class LoginBloc {
 
   Future<User> fetchCurrentUser() async {
     _log.finest('fetchCurrentUser()');
+
     return _api.fetchCurrentUser().then((response) {
       _userSubject.add(response.data!);
       return response.data!;
     }).catchError((err) {
-      if (err is ApiResponse) {
+      if (err is SocketException) {
+        _log.warning('SocketException: ${err.message}');
+      } else if (err is ApiResponse) {
         _log.finest('ApiError: ${err.error?.message}');
       } else {
         _log.finest('Unknown error: $err');
