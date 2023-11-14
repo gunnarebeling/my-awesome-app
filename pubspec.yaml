@@ -20,7 +20,7 @@ dependencies:
   flutter_local_notifications: ^16.1.0
   http: ^0.13.6
   inventiv_critic_flutter: ^0.2.0
-  logging: ^1.2.0
+  logging: ^1.0.2
   package_info_plus: ^4.2.0
   rxdart: ^0.27.7
   shared_preferences: ^2.2.2
