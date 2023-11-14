@@ -9,21 +9,26 @@ class LoginApi {
   AppHttpClient get _client => AppHttpClient();
 
   Future<ApiResponse<User>> login(String email, String password) async {
-    return await _client
+    return _client
         .post(
           Uri.parse('$apiUrl/api/v1/sign_in'),
+          headers: await getDefaultHeaders(),
           body: json.encode({
             'user': {
               'email': email,
               'password': password,
             }
           }),
-          headers: await getDefaultHeaders(),
         )
         .then(ApiResponse.parseToObject<User>(User.fromJson));
   }
 
   Future<ApiResponse<User>> fetchCurrentUser() async {
-    return await _client.get(Uri.parse('$apiUrl/api/v1/me'), headers: await getDefaultHeaders()).then(ApiResponse.parseToObject<User>(User.fromJson));
+    return _client
+        .get(
+          Uri.parse('$apiUrl/api/v1/me'),
+          headers: await getDefaultHeaders(),
+        )
+        .then(ApiResponse.parseToObject<User>(User.fromJson));
   }
 }
