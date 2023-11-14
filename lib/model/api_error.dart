@@ -12,7 +12,7 @@ class ApiError {
   });
 
   factory ApiError.fromJson(Json json, int statusCode) {
-    var errors = json['errors'] is List //
+    final errors = json['errors'] is List //
         ? json['errors'].first
         : json['errors'];
     final error = errors ?? json['error'];
