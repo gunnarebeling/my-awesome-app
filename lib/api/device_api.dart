@@ -9,14 +9,14 @@ class DeviceApi {
   AppHttpClient get _client => AppHttpClient();
 
   Future<ApiResponse> register(String deviceToken) async {
-    return await _client
+    return _client
         .post(
           Uri.parse('$apiUrl/api/v1/devices'),
           body: json.encode({
             'device': {
               'token': deviceToken,
               'platform': Platform.isIOS ? 'ios' : 'android',
-            }
+            },
           }),
           headers: await getDefaultHeaders(),
         )
@@ -25,7 +25,7 @@ class DeviceApi {
   }
 
   Future<ApiResponse> unregister(String deviceToken) async {
-    return await _client
+    return _client
         .delete(
           Uri.parse('$apiUrl/api/v1/devices/$deviceToken'),
           headers: await getDefaultHeaders(),

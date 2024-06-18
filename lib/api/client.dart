@@ -25,28 +25,28 @@ class AppHttpClient implements http.Client {
     _loadClientHeader();
   }
 
-  _loadClientHeader() async {
+  Future<void> _loadClientHeader() async {
     packageInfo = await PackageInfo.fromPlatform();
     _clientHeader = 'Version ${packageInfo!.version}+$buildNumber';
 
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final deviceInfo = DeviceInfoPlugin();
 
     if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      final androidInfo = await deviceInfo.androidInfo;
       _clientHeader = '$_clientHeader / Android ${androidInfo.version.release} / model: ${androidInfo.model}';
     }
 
     if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      final iosInfo = await deviceInfo.iosInfo;
       _clientHeader = '$_clientHeader / iOS ${iosInfo.systemVersion} / model: ${iosInfo.utsname.machine}';
     }
   }
 
   String get buildNumber {
-    if (packageInfo == null) return "0";
-    int? asNumber = int.tryParse(packageInfo!.buildNumber);
+    if (packageInfo == null) return '0';
+    final asNumber = int.tryParse(packageInfo!.buildNumber);
     if (asNumber == null) return packageInfo!.buildNumber;
-    return "${asNumber % 10000}";
+    return '${asNumber % 10000}';
   }
 
   @override
@@ -55,12 +55,12 @@ class AppHttpClient implements http.Client {
   }
 
   Future<http.Response> _logRequest(Future<http.Response> requestFuture) {
-    var startTime = DateTime.now();
+    final startTime = DateTime.now();
     return requestFuture.then((response) {
-      var endTime = DateTime.now();
+      final endTime = DateTime.now();
       LoggingBloc().logNetworkRequest(
-        url: response.request?.url.toString() ?? "",
-        method: response.request?.method ?? "",
+        url: response.request?.url.toString() ?? '',
+        method: response.request?.method ?? '',
         statusCode: response.statusCode,
         startTime: startTime,
         endTime: endTime,
@@ -70,42 +70,42 @@ class AppHttpClient implements http.Client {
   }
 
   @override
-  Future<http.Response> head(url, {Map<String, String>? headers}) {
+  Future<http.Response> head(Uri url, {Map<String, String>? headers}) {
     return _logRequest(_client.head(url, headers: baseHeaders(headers)));
   }
 
   @override
-  Future<http.Response> delete(url, {Object? body, Encoding? encoding, Map<String, String>? headers}) {
+  Future<http.Response> delete(Uri url, {Object? body, Encoding? encoding, Map<String, String>? headers}) {
     return _logRequest(_client.delete(url, body: body, encoding: encoding, headers: baseHeaders(headers)));
   }
 
   @override
-  Future<http.Response> get(url, {Map<String, String>? headers}) {
+  Future<http.Response> get(Uri url, {Map<String, String>? headers}) {
     return _logRequest(_client.get(url, headers: baseHeaders(headers)));
   }
 
   @override
-  Future<http.Response> patch(url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+  Future<http.Response> patch(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return _logRequest(_client.patch(url, headers: baseHeaders(headers), body: body, encoding: encoding));
   }
 
   @override
-  Future<http.Response> post(url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+  Future<http.Response> post(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return _logRequest(_client.post(url, headers: baseHeaders(headers), body: body, encoding: encoding));
   }
 
   @override
-  Future<http.Response> put(url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+  Future<http.Response> put(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return _logRequest(_client.put(url, headers: baseHeaders(headers), body: body, encoding: encoding));
   }
 
   @override
-  Future<String> read(url, {Map<String, String>? headers}) {
+  Future<String> read(Uri url, {Map<String, String>? headers}) {
     return _client.read(url, headers: baseHeaders(headers));
   }
 
   @override
-  Future<Uint8List> readBytes(url, {Map<String, String>? headers}) {
+  Future<Uint8List> readBytes(Uri url, {Map<String, String>? headers}) {
     return _client.readBytes(url, headers: baseHeaders(headers));
   }
 

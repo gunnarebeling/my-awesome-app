@@ -4,12 +4,12 @@ final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
 class ConfigRepository {
   Future<String?> getValueForKey(String key) async {
-    final SharedPreferences prefs = await _prefs;
+    final prefs = await _prefs;
     return prefs.getString(key);
   }
 
   Future<void> setValueForKey(String key, String value) async {
-    final SharedPreferences prefs = await _prefs;
+    final prefs = await _prefs;
     await prefs.setString(key, value);
   }
 }

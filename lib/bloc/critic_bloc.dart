@@ -45,19 +45,19 @@ class CriticBloc {
     } catch (e) {
       // ignore
     }
-    BugReport report = BugReport.create(description: description, stepsToReproduce: '', userIdentifier: user?.id ?? 'anonymous');
+    final report = BugReport.create(description: description, stepsToReproduce: '', userIdentifier: user?.id ?? 'anonymous');
     report.attachments = [];
 
     // Create a temporary file
-    var tempDir = await Directory.systemTemp.createTemp();
-    var tempFile = File('${tempDir.path}/logs.txt');
+    final tempDir = await Directory.systemTemp.createTemp();
+    final tempFile = File('${tempDir.path}/logs.txt');
 
     // Write each log to the temporary file
     await tempFile.writeAsString(LoggingBloc().logs.join('\n'));
 
     report.attachments!.add(Attachment(name: 'logs.txt', path: tempFile.path));
 
-    return await critic.submitReport(report);
+    return critic.submitReport(report);
   }
 
   void dispose() {}
