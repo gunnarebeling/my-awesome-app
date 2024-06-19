@@ -8,28 +8,36 @@ import 'package:flutter_app_base/bloc/logging_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
-class AppHttpClient implements http.Client {
-  final http.Client _client = http.Client();
-
-  Map<String, String> baseHeaders(Map<String, String>? headers) {
-    return {
-      if (_clientHeader.isNotEmpty) 'X-App-Client': _clientHeader,
-      ...(headers ?? {}),
-    };
+class HttpClient implements http.Client {
+  HttpClient() {
+    _initialize();
   }
 
-  String _clientHeader = '';
-  PackageInfo? packageInfo;
+  final http.Client _client = http.Client();
 
-  AppHttpClient() {
+  late final String appVersion;
+  late final PackageInfo? packageInfo;
+  late final String _clientHeader;
+
+  String get buildNumber {
+    final info = packageInfo;
+    if (info == null) return '0';
+
+    final asNumber = int.tryParse(info.buildNumber);
+    if (asNumber == null) return info.buildNumber;
+
+    return '${asNumber % 10000}';
+  }
+
+  Future<void> _initialize() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    appVersion = 'Version ${packageInfo?.version}+$buildNumber';
+
     _loadClientHeader();
   }
 
-  _loadClientHeader() async {
-    packageInfo = await PackageInfo.fromPlatform();
-    _clientHeader = 'Version ${packageInfo!.version}+$buildNumber';
-
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  Future<void> _loadClientHeader() async {
+    final deviceInfo = DeviceInfoPlugin();
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -42,16 +50,11 @@ class AppHttpClient implements http.Client {
     }
   }
 
-  String get buildNumber {
-    if (packageInfo == null) return "0";
-    int? asNumber = int.tryParse(packageInfo!.buildNumber);
-    if (asNumber == null) return packageInfo!.buildNumber;
-    return "${asNumber % 10000}";
-  }
-
-  @override
-  void close() {
-    _client.close();
+  Map<String, String> baseHeaders(Map<String, String>? headers) {
+    return {
+      if (_clientHeader.isNotEmpty) 'X-App-Client': _clientHeader,
+      ...(headers ?? {}),
+    };
   }
 
   Future<http.Response> _logRequest(Future<http.Response> requestFuture) {
@@ -70,7 +73,12 @@ class AppHttpClient implements http.Client {
   }
 
   @override
-  Future<http.Response> head(url, {Map<String, String>? headers}) {
+  void close() {
+    _client.close();
+  }
+
+  @override
+  Future<http.Response> head(Uri url, {Map<String, String>? headers}) {
     return _logRequest(_client.head(url, headers: baseHeaders(headers)));
   }
 
