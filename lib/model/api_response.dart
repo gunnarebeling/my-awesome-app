@@ -1,9 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_app_base/model/api_error.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
-
-import 'api_error.dart';
 
 /// A response from an API call.
 ///
@@ -15,7 +14,11 @@ class ApiResponse<T> {
   final Map<String, String>? headers;
   final ApiError? error;
 
-  ApiResponse({this.data, this.error, this.headers});
+  ApiResponse({
+    this.data,
+    this.headers,
+    this.error,
+  });
 
   /// Parses a [Response] to an [ApiResponse].
   ///
@@ -40,7 +43,7 @@ class ApiResponse<T> {
     }
   }
 
-  static Future parseStatusOnly(response) {
+  static Future parseStatusOnly(Response response) {
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       // success!
       return Future.value(true);

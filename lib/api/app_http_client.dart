@@ -17,7 +17,7 @@ final class AppHttpClient implements http.Client {
 
   late final String appVersion;
   late final PackageInfo? packageInfo;
-  late final String _clientHeader;
+  String _clientHeader = '';
 
   String get buildNumber {
     final info = packageInfo;
@@ -41,12 +41,12 @@ final class AppHttpClient implements http.Client {
 
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfo.androidInfo;
-      _clientHeader = '$_clientHeader / Android ${androidInfo.version.release} / model: ${androidInfo.model}';
+      _clientHeader = '$appVersion / Android ${androidInfo.version.release} / model: ${androidInfo.model}';
     }
 
     if (Platform.isIOS) {
       final iosInfo = await deviceInfo.iosInfo;
-      _clientHeader = '$_clientHeader / iOS ${iosInfo.systemVersion} / model: ${iosInfo.utsname.machine}';
+      _clientHeader = '$appVersion / iOS ${iosInfo.systemVersion} / model: ${iosInfo.utsname.machine}';
     }
   }
 
