@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter_app_base/api/http_client.dart';
+import 'package:flutter_app_base/api/app_http_client.dart';
 import 'package:flutter_app_base/bloc/config_bloc.dart';
 
 base class Api {
   final String apiUrl = 'http://localhost:3000';
 
-  HttpClient get client => HttpClient();
+  AppHttpClient get client => AppHttpClient();
 
   Future<String> getAuthHeader() async {
     final email = await ConfigBloc().streamFor(ConfigBloc.kAuthEmail).first;

@@ -8,8 +8,8 @@ import 'package:flutter_app_base/bloc/logging_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
-class HttpClient implements http.Client {
-  HttpClient() {
+final class AppHttpClient implements http.Client {
+  AppHttpClient() {
     _initialize();
   }
 
