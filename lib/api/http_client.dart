@@ -40,12 +40,12 @@ class HttpClient implements http.Client {
     final deviceInfo = DeviceInfoPlugin();
 
     if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      final androidInfo = await deviceInfo.androidInfo;
       _clientHeader = '$_clientHeader / Android ${androidInfo.version.release} / model: ${androidInfo.model}';
     }
 
     if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      final iosInfo = await deviceInfo.iosInfo;
       _clientHeader = '$_clientHeader / iOS ${iosInfo.systemVersion} / model: ${iosInfo.utsname.machine}';
     }
   }
@@ -57,19 +57,19 @@ class HttpClient implements http.Client {
     };
   }
 
-  Future<http.Response> _logRequest(Future<http.Response> requestFuture) {
-    var startTime = DateTime.now();
-    return requestFuture.then((response) {
-      var endTime = DateTime.now();
-      LoggingBloc().logNetworkRequest(
-        url: response.request?.url.toString() ?? "",
-        method: response.request?.method ?? "",
-        statusCode: response.statusCode,
-        startTime: startTime,
-        endTime: endTime,
-      );
-      return response;
-    });
+  Future<http.Response> _logRequest(Future<http.Response> request) async {
+    final startTime = DateTime.now();
+    final response = await request;
+
+    LoggingBloc().logNetworkRequest(
+      url: response.request?.url.toString() ?? '',
+      method: response.request?.method ?? '',
+      statusCode: response.statusCode,
+      startTime: startTime,
+      endTime: DateTime.now(),
+    );
+
+    return response;
   }
 
   @override
@@ -83,37 +83,37 @@ class HttpClient implements http.Client {
   }
 
   @override
-  Future<http.Response> delete(url, {Object? body, Encoding? encoding, Map<String, String>? headers}) {
+  Future<http.Response> delete(Uri url, {Object? body, Encoding? encoding, Map<String, String>? headers}) {
     return _logRequest(_client.delete(url, body: body, encoding: encoding, headers: baseHeaders(headers)));
   }
 
   @override
-  Future<http.Response> get(url, {Map<String, String>? headers}) {
+  Future<http.Response> get(Uri url, {Map<String, String>? headers}) {
     return _logRequest(_client.get(url, headers: baseHeaders(headers)));
   }
 
   @override
-  Future<http.Response> patch(url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+  Future<http.Response> patch(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return _logRequest(_client.patch(url, headers: baseHeaders(headers), body: body, encoding: encoding));
   }
 
   @override
-  Future<http.Response> post(url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+  Future<http.Response> post(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return _logRequest(_client.post(url, headers: baseHeaders(headers), body: body, encoding: encoding));
   }
 
   @override
-  Future<http.Response> put(url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
+  Future<http.Response> put(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) {
     return _logRequest(_client.put(url, headers: baseHeaders(headers), body: body, encoding: encoding));
   }
 
   @override
-  Future<String> read(url, {Map<String, String>? headers}) {
+  Future<String> read(Uri url, {Map<String, String>? headers}) {
     return _client.read(url, headers: baseHeaders(headers));
   }
 
   @override
-  Future<Uint8List> readBytes(url, {Map<String, String>? headers}) {
+  Future<Uint8List> readBytes(Uri url, {Map<String, String>? headers}) {
     return _client.readBytes(url, headers: baseHeaders(headers));
   }
 

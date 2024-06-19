@@ -14,7 +14,7 @@ final class LoginApi extends Api {
             'user': {
               'email': email,
               'password': password,
-            }
+            },
           }),
         )
         .then(ApiResponse.parseToObject(User.fromJson));
