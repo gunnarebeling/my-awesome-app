@@ -19,19 +19,19 @@ class ConfigBloc {
 
   ConfigBloc._internal();
 
-  initialize() async {
+  Future<void> initialize() async {
     _logger.finest('initialize()');
-    String? authEmail = await stringValueFor(kAuthEmail);
-    _streams[kAuthEmail] = BehaviorSubject<String>.seeded(authEmail ?? "");
+    final authEmail = await stringValueFor(kAuthEmail);
+    _streams[kAuthEmail] = BehaviorSubject<String>.seeded(authEmail ?? '');
 
-    String? authToken = await stringValueFor(kAuthToken);
-    _streams[kAuthToken] = BehaviorSubject<String>.seeded(authToken ?? "");
+    final authToken = await stringValueFor(kAuthToken);
+    _streams[kAuthToken] = BehaviorSubject<String>.seeded(authToken ?? '');
 
-    String? authId = await stringValueFor(kAuthId);
-    _streams[kAuthId] = BehaviorSubject<String>.seeded(authId ?? "");
+    final authId = await stringValueFor(kAuthId);
+    _streams[kAuthId] = BehaviorSubject<String>.seeded(authId ?? '');
   }
 
-  dispose() {
+  void dispose() {
     _streams.values.forEach(_closeSubject);
   }
 
@@ -47,7 +47,7 @@ class ConfigBloc {
   }
 
   Future<double?> doubleValueFor(String key) async {
-    dynamic value = await _repository.getValueForKey(key);
+    final value = await _repository.getValueForKey(key);
     _logger.finest('doubleValueFor $key -> $value');
     if (value != null) {
       return double.tryParse(value);
@@ -56,7 +56,7 @@ class ConfigBloc {
   }
 
   Future<String?> stringValueFor(String key) async {
-    dynamic value = await _repository.getValueForKey(key);
+    final value = await _repository.getValueForKey(key);
     _logger.finest('stringValueFor $key -> $value');
     return value;
   }
@@ -70,7 +70,7 @@ class ConfigBloc {
     _streams[key]!.add(value);
   }
 
-  static const kAuthToken = "kAuthToken";
-  static const kAuthEmail = "kAuthEmail";
-  static const kAuthId = "kAuthId";
+  static const kAuthToken = 'kAuthToken';
+  static const kAuthEmail = 'kAuthEmail';
+  static const kAuthId = 'kAuthId';
 }

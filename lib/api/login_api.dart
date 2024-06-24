@@ -17,7 +17,7 @@ class LoginApi {
             'user': {
               'email': email,
               'password': password,
-            }
+            },
           }),
         )
         .then(ApiResponse.parseToObject<User>(User.fromJson));

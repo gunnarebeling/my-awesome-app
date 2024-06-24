@@ -47,11 +47,9 @@ class NotificationBloc {
     _log.finest('initialize()');
     dispose();
     await _firebaseMessaging.requestPermission();
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_launcher');
-    final DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings(onDidReceiveLocalNotification: _handleLocalNotification);
-    final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    const initializationSettingsAndroid = AndroidInitializationSettings('ic_launcher');
+    final initializationSettingsIOS = DarwinInitializationSettings(onDidReceiveLocalNotification: _handleLocalNotification);
+    final initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: _onSelectNotification);
     _onMessageSubscription = FirebaseMessaging.onMessage.listen(_handleMessage);
@@ -60,7 +58,7 @@ class NotificationBloc {
     }
     initTappedMessages();
 
-    String? token = await _firebaseMessaging.getToken();
+    final token = await _firebaseMessaging.getToken();
     _log.info('FCM Token: $token');
     _loginResultStreamSubscription = LoginBloc().currentUser.listen((result) {
       Future.delayed(const Duration(seconds: 5)).then((_) => _registerDevice(token ?? ''));
@@ -83,7 +81,7 @@ class NotificationBloc {
   }
 
   Future<void> initTappedMessages() async {
-    RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
+    final initialMessage = await _firebaseMessaging.getInitialMessage();
 
     if (initialMessage != null) {
       // The app was opened from a terminated state by tapping a notification
@@ -102,7 +100,7 @@ class NotificationBloc {
   void _handleMessage(RemoteMessage remoteMessage) {
     final Map data = remoteMessage.data;
     _log.info('_handleMessage: $data');
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'artful_agenda_event_alerts',
       'Artful Agenda Alerts',
       channelDescription: 'Alerts received while Artful Agenda is running',
@@ -110,11 +108,10 @@ class NotificationBloc {
       priority: Priority.high,
       icon: 'ic_launcher',
     );
-    const DarwinNotificationDetails iosPlatformChannelSpecifics = DarwinNotificationDetails();
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iosPlatformChannelSpecifics);
+    const iosPlatformChannelSpecifics = DarwinNotificationDetails();
+    const platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iosPlatformChannelSpecifics);
 
-    final RemoteNotification? notification = remoteMessage.notification;
+    final notification = remoteMessage.notification;
 
     if (notification == null) {
       _log.info('data only message');

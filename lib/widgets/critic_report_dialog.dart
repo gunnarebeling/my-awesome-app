@@ -15,7 +15,7 @@ class _CriticReportDialogState extends State<CriticReportDialog> {
 
   Logger get _log => Logger('CriticReportDialog');
 
-  void _submitReport() async {
+  Future<void> _submitReport() async {
     setState(() {
       _submitting = true;
     });

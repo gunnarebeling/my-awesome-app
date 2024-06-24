@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_base/bloc/critic_bloc.dart';
+import 'package:flutter_app_base/widgets/critic_report_dialog.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inventiv_critic_flutter/modal/bug_report.dart';
-import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:flutter_app_base/widgets/critic_report_dialog.dart';
-import 'package:flutter_app_base/bloc/critic_bloc.dart';
+import 'package:mockito/mockito.dart';
 
 import 'critic_report_dialog_test.mocks.dart';
 
@@ -18,9 +18,7 @@ void main() {
     CriticBloc.instance = mockCriticBloc;
   });
 
-  tearDown(() {
-    CriticBloc.reset();
-  });
+  tearDown(CriticBloc.reset);
 
   testWidgets('CriticReportDialog displays description TextField', (WidgetTester tester) async {
     // Create the CriticReportDialog widget
@@ -143,7 +141,7 @@ void main() {
   });
 
   testWidgets('CriticReportDialog displays CircularProgressIndicator when _submitting is true', (WidgetTester tester) async {
-    Completer<BugReport> completer = Completer<BugReport>();
+    final completer = Completer<BugReport>();
     when(mockCriticBloc.createReport(description: anyNamed('description'))).thenAnswer((_) {
       return completer.future;
     });
