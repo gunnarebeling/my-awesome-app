@@ -23,9 +23,7 @@ jobs:
           dart pub global activate fvm
           echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
       - name: Setup Flutter
-        run: |
-          fvm install $(cat .flutter-version)
-          fvm use $(cat .flutter-version)
+        run: fvm install
       - name: Install dependencies
         run: fvm flutter pub get
       - name: Generate mocks

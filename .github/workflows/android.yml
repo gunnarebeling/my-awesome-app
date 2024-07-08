@@ -38,9 +38,9 @@ jobs:
     - uses: actions/checkout@v3.5.0
     - uses: ./.github/workflows/find_build_number
       id: find_build_number
-    - run: change-flutter-version $(cat .flutter-version)
-    - run: flutter pub get
-    - run: flutter clean
+    - run: fvm use
+    - run: fvm flutter pub get
+    - run: fvm flutter clean
     - run: echo $ANDROID_KEYSTORE | base64 -di > keystore.jks
     - run: echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
     - run: echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties

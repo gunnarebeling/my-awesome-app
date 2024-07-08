@@ -21,8 +21,8 @@ jobs:
       LANG: en_US.UTF-8
       PILOT_USERNAME: admin@twinsunsolutions.com
       PILOT_APP_IDENTIFIER: dev.twinsun.flutter-app-base
-      PILOT_TEAM_ID: N/A - There is no value for REPLACE_ME_PILOT_TEAM_ID in the .gitlab-ci
-      PILOT_DEV_PORTAL_TEAM_ID: N/A - There is no value for REPLACE_ME_DEV_PORTAL_TEAM_ID in the .gitlab
+      PILOT_TEAM_ID: N/A - There is no value for REPLACE_ME_PILOT_TEAM_ID
+      PILOT_DEV_PORTAL_TEAM_ID: N/A - There is no value for REPLACE_ME_DEV_PORTAL_TEAM_ID
       PILOT_APPLE_ID: ${{ inputs.pilot_apple_id }}
       FLAVOR: ${{ inputs.flavor }}
       FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
@@ -37,10 +37,9 @@ jobs:
         version: 2.18.4
     - uses: ./.github/workflows/find_build_number
       id: find_build_number
-    - run: echo "FLUTTER_VERSION=$(cat .flutter-version)" >> $GITHUB_ENV
+    - run: echo "FLUTTER_VERSION=$(./.github/scripts/get_flutter_version.sh)" >> $GITHUB_ENV
     - run: dart pub global activate fvm
-    - run: fvm install $FLUTTER_VERSION
-    - run: fvm use $FLUTTER_VERSION
+    - run: fvm install
     - run: fvm flutter pub get
     - run: pod repo update
     - run: fvm flutter clean
