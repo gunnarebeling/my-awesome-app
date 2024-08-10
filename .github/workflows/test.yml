@@ -15,18 +15,28 @@ jobs:
     container:
       image: twinsunllc/flutter
       options: --user root
+
     steps:
-      - uses: actions/checkout@v3.5.0
+      - name: Checkout Code
+        uses: actions/checkout@v3.5.0
+
       - name: Setup FVM
         run: |
           git config --global --add safe.directory /home/flutter/flutter-sdk
           dart pub global activate fvm
           echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-      - name: Setup Flutter
-        run: fvm install
-      - name: Install dependencies
+
+      - name: Set Flutter Version
+        run: |
+          flutter pub global activate fvm
+          fvm install $(cat .fvmrc | jq -r .flutter)
+          fvm use $(cat .fvmrc | jq -r .flutter)
+
+      - name: Install Dependencies
         run: fvm flutter pub get
-      - name: Generate mocks
+
+      - name: Generate Mocks
         run: fvm flutter pub run build_runner build --delete-conflicting-outputs
-      - name: Run tests
+
+      - name: Run Tests
         run: fvm flutter test
