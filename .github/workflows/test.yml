@@ -29,7 +29,7 @@ jobs:
       - name: Set Flutter Version
         run: |
           flutter pub global activate fvm
-          sudo apt-get install -y jq
+          apt-get update && apt-get install -y jq
           fvm install $(cat .fvmrc | jq -r .flutter)
           fvm use $(cat .fvmrc | jq -r .flutter)
 
