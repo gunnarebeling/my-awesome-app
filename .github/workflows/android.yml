@@ -1,7 +1,6 @@
 name: Android Builds
 
 on:
-  push:
   workflow_call:
     inputs:
       supply_package_name:
@@ -67,5 +66,5 @@ jobs:
         echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
         echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
 
-    # - name: Deploy Android Build
-    #   run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
+    - name: Deploy Android Build
+      run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
