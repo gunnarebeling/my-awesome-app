@@ -22,28 +22,52 @@ jobs:
     container:
       image: twinsunllc/android-flutter
     timeout-minutes: 30
+
     env:
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
+
+      # Inputs
       SUPPLY_PACKAGE_NAME: ${{ inputs.supply_package_name }}
-      ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-      ANDROID_KEY_ALIAS: ${{ vars.ANDROID_KEY_ALIAS }}
-      ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
       FLAVOR: ${{ inputs.flavor }}
       PLATFORM: ${{ inputs.platform }}
+
+      # Secrets
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      SUPPLY_JSON_KEY_DATA: ${{ secrets.SUPPLY_JSON_KEY_DATA }}
+
+      # Android Keystore
+      ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+      ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ vars.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
     steps:
-    - uses: actions/checkout@v3.5.0
-    - uses: ./.github/workflows/find_build_number
+    - name: Checkout Code
+      uses: actions/checkout@v3.5.0
+
+    - name: Find Build Number
+      uses: ./.github/workflows/find_build_number
       id: find_build_number
-    - run: fvm use
-    - run: fvm flutter pub get
-    - run: fvm flutter clean
-    - run: echo $ANDROID_KEYSTORE | base64 -di > keystore.jks
-    - run: echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
-    - run: echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
-    - run: echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
-    - run: echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
-    - run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
+
+    - name: Set Flutter Version
+      run: |
+        flutter pub global activate fvm
+        fvm install $(cat .fvmrc | jq -r .flutter)
+        fvm use $(cat .fvmrc | jq -r .flutter)
+
+    - name: Initialize Flutter Project
+      run: |
+        fvm flutter pub get
+        fvm flutter clean
+
+    - name: Setup Keystore Signing
+      run: |
+        echo $ANDROID_KEYSTORE | base64 -di > keystore.jks
+        echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+        echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+        echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
+        echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
+
+    - name: Deploy Android Build
+      run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
