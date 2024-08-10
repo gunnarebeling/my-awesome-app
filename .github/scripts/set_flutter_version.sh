@@ -51,6 +51,10 @@ set_flutter_version() {
 
 main() {
   ensure_jq_installed || exit 1
+
+  git config --global --add safe.directory /home/flutter/flutter-sdk
+  echo "${HOME}/.pub-cache/bin" >> "$GITHUB_PATH"
+
   local flutter_version
   flutter_version=$(get_flutter_version) || exit 1
   set_flutter_version "$flutter_version" || exit 1

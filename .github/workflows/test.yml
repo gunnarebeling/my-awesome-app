@@ -20,12 +20,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3.5.0
 
-      - name: Setup FVM
-        run: |
-          git config --global --add safe.directory /home/flutter/flutter-sdk
-          dart pub global activate fvm
-          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-
       - name: Set Flutter Version
         run: ./.github/scripts/set_flutter_version.sh
 
