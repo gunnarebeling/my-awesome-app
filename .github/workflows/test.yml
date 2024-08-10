@@ -23,7 +23,6 @@ jobs:
       - name: Setup FVM
         run: |
           git config --global --add safe.directory /home/flutter/flutter-sdk
-          dart pub global deactivate fvm
           dart pub global activate fvm
           echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
 
