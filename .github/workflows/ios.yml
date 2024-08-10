@@ -42,8 +42,6 @@ jobs:
 
     - name: Set Dart Version 2.18.4
       uses: dart-lang/setup-dart@v1
-      with:
-        sdk: stable
 
     - name: Find Build Number
       uses: ./.github/workflows/find_build_number
