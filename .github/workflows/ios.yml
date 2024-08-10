@@ -16,6 +16,7 @@ jobs:
   build:
     runs-on: macos-latest
     timeout-minutes: 30
+
     env:
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
@@ -23,24 +24,42 @@ jobs:
       PILOT_APP_IDENTIFIER: dev.twinsun.flutter-app-base
       PILOT_TEAM_ID: N/A - There is no value for REPLACE_ME_PILOT_TEAM_ID
       PILOT_DEV_PORTAL_TEAM_ID: N/A - There is no value for REPLACE_ME_DEV_PORTAL_TEAM_ID
+
+      # Inputs
       PILOT_APPLE_ID: ${{ inputs.pilot_apple_id }}
       FLAVOR: ${{ inputs.flavor }}
+
+      # Secrets
       FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
     steps:
-    - uses: actions/checkout@v3.5.0
-    - uses: dart-lang/setup-dart@v1
+    - name: Checkout Code
+      uses: actions/checkout@v3.5.0
+
+    - name: Set Dart Version 2.18.4
+      uses: dart-lang/setup-dart@v1
       with:
-        channel: stable
-        version: 2.18.4
-    - uses: ./.github/workflows/find_build_number
+        sdk: 2.18.4
+
+    - name: Find Build Number
+      uses: ./.github/workflows/find_build_number
       id: find_build_number
-    - run: echo "FLUTTER_VERSION=$(./.github/scripts/get_flutter_version.sh)" >> $GITHUB_ENV
-    - run: dart pub global activate fvm
-    - run: fvm install
-    - run: fvm flutter pub get
-    - run: pod repo update
-    - run: fvm flutter clean
-    - run: bin/deploy ios $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" "$BUILD_NAME_OVERRIDE"
+
+    - name: Set Flutter Version
+      run: |
+        flutter pub global activate fvm
+        fvm install $(cat .fvmrc | jq -r .flutter)
+        fvm use $(cat .fvmrc | jq -r .flutter)
+        echo "FLUTTER_VERSION=$(cat .fvmrc | jq -r .flutter) >> $GITHUB_ENV
+
+    - name: Initialize Flutter Project
+      run: |
+        fvm flutter pub get
+        pod repo update
+        fvm flutter clean
+
+    - name: Deploy iOS Build
+      run: bin/deploy ios $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" "$BUILD_NAME_OVERRIDE"
