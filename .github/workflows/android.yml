@@ -1,6 +1,7 @@
 name: Android Builds
 
 on:
+  push:
   workflow_call:
     inputs:
       supply_package_name:
@@ -51,10 +52,7 @@ jobs:
       id: find_build_number
 
     - name: Set Flutter Version
-      run: |
-        flutter pub global activate fvm
-        fvm install $(cat .fvmrc | jq -r .flutter)
-        fvm use $(cat .fvmrc | jq -r .flutter)
+      run: ./.github/scripts/set_flutter_version.sh
 
     - name: Initialize Flutter Project
       run: |
@@ -69,5 +67,5 @@ jobs:
         echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
         echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
 
-    - name: Deploy Android Build
-      run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
+    # - name: Deploy Android Build
+    #   run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
