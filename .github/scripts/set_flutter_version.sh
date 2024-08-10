@@ -54,6 +54,7 @@ main() {
 
   git config --global --add safe.directory /home/flutter/flutter-sdk
   echo "${HOME}/.pub-cache/bin" >> "$GITHUB_PATH"
+  export PATH="$PATH:$HOME/.pub-cache/bin"
 
   local flutter_version
   flutter_version=$(get_flutter_version) || exit 1
