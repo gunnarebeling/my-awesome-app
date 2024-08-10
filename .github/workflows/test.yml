@@ -27,11 +27,7 @@ jobs:
           echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
 
       - name: Set Flutter Version
-        run: |
-          flutter pub global activate fvm
-          apt-get update && apt-get install -y jq
-          fvm install $(cat .fvmrc | jq -r .flutter)
-          fvm use $(cat .fvmrc | jq -r .flutter)
+        run: ./.github/scripts/set_flutter_version.sh
 
       - name: Install Dependencies
         run: fvm flutter pub get
