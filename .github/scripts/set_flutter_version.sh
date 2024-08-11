@@ -25,7 +25,7 @@ initialize() {
 get_flutter_version() {
   local file=".fvmrc"
 
-  # If file exists and is a regular file (i.e., not a directory, symbolic link, or special file)
+  # If file does not exist or is not a regular file (i.e., a directory, symbolic link, or special file)
   if [[ ! -f "$file" ]]; then
     handle_error "$file not found"
   fi
@@ -44,7 +44,7 @@ get_flutter_version() {
 set_flutter_version() {
   local version="$1"
 
-  # If fvm is not installed or unavailable
+  # If fvm is not installed or is unavailable
   if ! command -v fvm &> /dev/null; then
     printf "fvm not found. Installing fvm...\n"
     dart pub global activate fvm || handle_error "fvm installation failed"
@@ -54,8 +54,9 @@ set_flutter_version() {
   fvm install "$version" || handle_error "fvm install failed for version $version"
   fvm use "$version" || handle_error "fvm use failed for version $version"
 
-  # Optionally, set the version as an environment variable for Github Actions
+  # If string is not empty
   if [[ -n "$GITHUB_ENV" ]]; then
+    # Append Flutter version to GITHUB_ENV
     echo "FLUTTER_VERSION=$version" >> "$GITHUB_ENV"
   fi
 }
