@@ -1,16 +1,25 @@
 #!/bin/bash
 
-ensure_jq_installed() {
-  if ! command -v jq &> /dev/null; then
-    printf "jq not found. Installing jq...\n"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-      brew install jq || { printf "Error: jq installation failed\n" >&2; return 1; }
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-      apt-get update && apt-get install -y jq || { printf "Error: jq installation failed\n" >&2; return 1; }
-    else
-      printf "Error: Unsupported OS type\n" >&2
-      return 1
-    fi
+# Halt execution after returning non-zero
+set -e
+
+main() {
+  initialize
+  local flutter_version
+  flutter_version=$(get_flutter_version) || exit 1
+  set_flutter_version "$flutter_version" || exit 1
+}
+
+initialize() {
+  # Allow storing Flutter SDK
+  git config --global --add safe.directory /home/flutter/flutter-sdk
+
+  # Add FVM to current shell for immediate usage
+  export PATH="$PATH:$HOME/.pub-cache/bin"
+
+  # Add FVM to Github path for later usage
+  if [[ -n "$GITHUB_PATH" ]]; then
+    echo "${HOME}/.pub-cache/bin" >> "$GITHUB_PATH"
   fi
 }
 
@@ -23,7 +32,8 @@ get_flutter_version() {
   fi
 
   local version
-  if ! version=$(jq -r '.flutter' "$file"); then
+  version=$(sed -n 's/.*"flutter": *"\([^"]*\)".*/\1/p' "$file") # This regex returns whatever value is between the next set of quotes after the flutter keyword
+  if [[ -z "$version" ]]; then
     printf "Error parsing version from %s\n" "$file" >&2
     return 1
   fi
@@ -47,23 +57,6 @@ set_flutter_version() {
   if [[ -n "$GITHUB_ENV" ]]; then
     echo "FLUTTER_VERSION=$version" >> "$GITHUB_ENV"
   fi
-}
-
-main() {
-  ensure_jq_installed || exit 1
-
-  # Allow storing Flutter SDK
-  git config --global --add safe.directory /home/flutter/flutter-sdk
-
-  # Add FVM to current shell for immediate usage
-  export PATH="$PATH:$HOME/.pub-cache/bin"
-
-  # Add FVM to Github path for later usage
-  echo "${HOME}/.pub-cache/bin" >> "$GITHUB_PATH"
-
-  local flutter_version
-  flutter_version=$(get_flutter_version) || exit 1
-  set_flutter_version "$flutter_version" || exit 1
 }
 
 main
