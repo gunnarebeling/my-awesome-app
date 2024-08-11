@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Halt execution after any return of a non-zero value
-set -e
+# Strict Mode
+# Exit on error, unset variable, or pipe failure.
+set -euo pipefail
 
 main() {
   initialize
@@ -13,28 +14,30 @@ initialize() {
   git config --global --add safe.directory /home/flutter/flutter-sdk
 
   # Add FVM to current shell for immediate usage
-  export PATH="$PATH:$HOME/.pub-cache/bin"
+  local fvm_path="$HOME/.pub-cache/bin"
+  export PATH="$PATH:$fvm_path"
 
-  # If string is not empty
-  if [[ -n "$GITHUB_PATH" ]]; then
+  # If GITHUB_PATH is not empty (The `:-` syntax defaults GITHUB_PATH to an empty string)
+  if [[ -n "${GITHUB_PATH:-}" ]]; then
     # Add FVM to Github path for later usage
-    echo "${HOME}/.pub-cache/bin" >> "$GITHUB_PATH"
+    echo "$fvm_path" >> "$GITHUB_PATH"
   fi
 }
 
 get_flutter_version() {
   local file=".fvmrc"
 
-  # If file does not exist or is not a regular file (i.e., a directory, symbolic link, or special file)
+  # If file does not exist
   if [[ ! -f "$file" ]]; then
     handle_error "$file not found"
   fi
 
   # This regex returns whatever value is between the next set of
   # quotes after the flutter keyword
-  local version=$(sed -n 's/.*"flutter": *"\([^"]*\)".*/\1/p' "$file")
+  local version
+  version=$(sed -n 's/.*"flutter": *"\([^"]*\)".*/\1/p' "$file")
   # If version is an empty string
-  if [[ -z "$version" ]]; then
+  if [[ -z "${version:-}" ]]; then
     handle_error "Error parsing version from $file"
   fi
 
@@ -54,8 +57,8 @@ set_flutter_version() {
   fvm install "$version" || handle_error "fvm install failed for version $version"
   fvm use "$version" || handle_error "fvm use failed for version $version"
 
-  # If string is not empty
-  if [[ -n "$GITHUB_ENV" ]]; then
+  # If GITHUB_ENV is not empty
+  if [[ -n "${GITHUB_ENV:-}" ]]; then
     # Append Flutter version to GITHUB_ENV
     echo "FLUTTER_VERSION=$version" >> "$GITHUB_ENV"
   fi
