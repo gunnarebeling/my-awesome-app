@@ -53,11 +53,11 @@ class LoginBloc {
 
   Future<User> login(String email, String password) {
     _log.finest('login($email)');
-    return _api.login(email, password).then((response) {
+    return _api.login(email, password).then((response) async {
+      await ConfigBloc().addToStream(ConfigBloc.kAuthEmail, response.data!.email);
+      await ConfigBloc().addToStream(ConfigBloc.kAuthToken, response.data!.authToken);
+      await ConfigBloc().addToStream(ConfigBloc.kAuthId, response.data!.id);
       _userSubject.add(response.data!);
-      ConfigBloc().addToStream(ConfigBloc.kAuthEmail, response.data!.email);
-      ConfigBloc().addToStream(ConfigBloc.kAuthToken, response.data!.authToken);
-      ConfigBloc().addToStream(ConfigBloc.kAuthId, response.data!.id);
       return response.data!;
     }).catchError((err) {
       if (err is ApiResponse) {
