@@ -15,6 +15,7 @@ final class DeviceApi extends Api {
               'token': token,
               'platform': Platform.isIOS ? 'ios' : 'android',
             },
+            },
           }),
         )
         .then(ApiResponse.parse)

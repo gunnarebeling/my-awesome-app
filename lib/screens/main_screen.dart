@@ -12,7 +12,6 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: LoginBloc().currentUser,
-        initialData: null,
         builder: (context, snapshot) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,

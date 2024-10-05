@@ -25,15 +25,15 @@ class LoggingBloc {
 
   Future initialize() async {
     Logger.root.onRecord.listen((LogRecord rec) {
-      var pieces = ['(${rec.time}) · ${rec.loggerName.isEmpty ? 'root' : rec.loggerName} · ${rec.level.name.toUpperCase()}: ${rec.message}'];
+      final pieces = ['(${rec.time}) · ${rec.loggerName.isEmpty ? 'root' : rec.loggerName} · ${rec.level.name.toUpperCase()}: ${rec.message}'];
       if (rec.error != null) pieces.add(rec.error.toString());
       if (rec.stackTrace != null) pieces.add(rec.stackTrace.toString());
 
-      _logs.add(pieces.join("\n"));
+      _logs.add(pieces.join('\n'));
 
-      FirebaseCrashlytics.instance.log(pieces.join("\n"));
+      FirebaseCrashlytics.instance.log(pieces.join('\n'));
 
-      print(pieces.join("\n")); // ignore: avoid_print
+      print(pieces.join('\n')); // ignore: avoid_print
     });
 
     Connectivity().onConnectivityChanged.listen(_logConnectivity);
@@ -42,8 +42,14 @@ class LoggingBloc {
     return Future.value();
   }
 
-  logNetworkRequest({required String url, required String method, required int statusCode, required DateTime startTime, required DateTime endTime}) {
-    final String message =
+  void logNetworkRequest({
+    required String url,
+    required String method,
+    required int statusCode,
+    required DateTime startTime,
+    required DateTime endTime,
+  }) {
+    final message =
         '(${DateTime.now()}) · Network · INFO: $method $url completed with $statusCode in ${endTime.difference(startTime).inMilliseconds / 1000}s';
     _logs.add(message);
 
@@ -51,16 +57,14 @@ class LoggingBloc {
     print(message);
   }
 
-  _logConnectivity(ConnectivityResult result) {
+  void _logConnectivity(ConnectivityResult result) {
     switch (result) {
       case ConnectivityResult.mobile:
         Logger.root.info('Network Connectivity: mobile');
         _connectedSubject.add(true);
-        break;
       case ConnectivityResult.wifi:
         Logger.root.info('Network Connectivity: wifi');
         _connectedSubject.add(true);
-        break;
       case ConnectivityResult.none:
       default:
         Logger.root.info('Network Connectivity: none');

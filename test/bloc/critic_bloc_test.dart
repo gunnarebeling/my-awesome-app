@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart'; // ignore: depend_on_referenced_packages
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_app_base/bloc/critic_bloc.dart';
 import 'package:flutter_app_base/bloc/login_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:inventiv_critic_flutter/critic.dart';
 import 'package:inventiv_critic_flutter/modal/bug_report.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart'; // ignore: depend_on_referenced_packages
 
 import 'critic_bloc_test.mocks.dart';
 
@@ -35,11 +35,13 @@ void main() {
     const description = 'Test description';
 
     // Mock the submitReport method
-    when(mockCritic.submitReport(any)).thenAnswer((_) async => BugReport(
-          description: description,
-          stepsToReproduce: '',
-          userIdentifier: 'test',
-        ));
+    when(mockCritic.submitReport(any)).thenAnswer(
+      (_) async => BugReport(
+        description: description,
+        stepsToReproduce: '',
+        userIdentifier: 'test',
+      ),
+    );
 
     // Call the createReport method
     await criticBloc.createReport(description: description);

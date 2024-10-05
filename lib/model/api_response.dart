@@ -43,7 +43,7 @@ class ApiResponse<T> {
     }
   }
 
-  static Future parseStatusOnly(Response response) {
+  static Future<bool> parseStatusOnly(Response response) {
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       // success!
       return Future.value(true);

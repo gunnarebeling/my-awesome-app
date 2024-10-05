@@ -14,7 +14,7 @@ void main() {
 
     test('fromJson creates ApiError with details from JSON.', () {
       final errorJson = {
-        'errors': {'code': 404, 'message': 'Resource not found.'}
+        'errors': {'code': 404, 'message': 'Resource not found.'},
       };
       final apiError = ApiError.fromJson(errorJson, 404);
 
