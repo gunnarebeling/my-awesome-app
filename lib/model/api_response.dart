@@ -14,7 +14,11 @@ class ApiResponse<T> {
   final Map<String, String>? headers;
   final ApiError? error;
 
-  ApiResponse({this.data, this.error, this.headers});
+  ApiResponse({
+    this.data,
+    this.headers,
+    this.error,
+  });
 
   /// Parses a [Response] to an [ApiResponse].
   ///
