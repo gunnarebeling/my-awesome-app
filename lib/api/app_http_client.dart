@@ -8,8 +8,47 @@ import 'package:flutter_app_base/bloc/logging_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
-class AppHttpClient implements http.Client {
+final class AppHttpClient implements http.Client {
+  AppHttpClient() {
+    _initialize();
+  }
+
   final http.Client _client = http.Client();
+
+  late final String appVersion;
+  late final PackageInfo? packageInfo;
+  String _clientHeader = '';
+
+  String get buildNumber {
+    final info = packageInfo;
+    if (info == null) return '0';
+
+    final asNumber = int.tryParse(info.buildNumber);
+    if (asNumber == null) return info.buildNumber;
+
+    return '${asNumber % 10000}';
+  }
+
+  Future<void> _initialize() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    appVersion = 'Version ${packageInfo?.version}+$buildNumber';
+
+    _loadClientHeader();
+  }
+
+  Future<void> _loadClientHeader() async {
+    final deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      _clientHeader = '$appVersion / Android ${androidInfo.version.release} / model: ${androidInfo.model}';
+    }
+
+    if (Platform.isIOS) {
+      final iosInfo = await deviceInfo.iosInfo;
+      _clientHeader = '$appVersion / iOS ${iosInfo.systemVersion} / model: ${iosInfo.utsname.machine}';
+    }
+  }
 
   Map<String, String> baseHeaders(Map<String, String>? headers) {
     return {
@@ -18,55 +57,24 @@ class AppHttpClient implements http.Client {
     };
   }
 
-  String _clientHeader = '';
-  PackageInfo? packageInfo;
+  Future<http.Response> _logRequest(Future<http.Response> request) async {
+    final startTime = DateTime.now();
+    final response = await request;
 
-  AppHttpClient() {
-    _loadClientHeader();
-  }
+    LoggingBloc().logNetworkRequest(
+      url: response.request?.url.toString() ?? '',
+      method: response.request?.method ?? '',
+      statusCode: response.statusCode,
+      startTime: startTime,
+      endTime: DateTime.now(),
+    );
 
-  Future<void> _loadClientHeader() async {
-    packageInfo = await PackageInfo.fromPlatform();
-    _clientHeader = 'Version ${packageInfo!.version}+$buildNumber';
-
-    final deviceInfo = DeviceInfoPlugin();
-
-    if (Platform.isAndroid) {
-      final androidInfo = await deviceInfo.androidInfo;
-      _clientHeader = '$_clientHeader / Android ${androidInfo.version.release} / model: ${androidInfo.model}';
-    }
-
-    if (Platform.isIOS) {
-      final iosInfo = await deviceInfo.iosInfo;
-      _clientHeader = '$_clientHeader / iOS ${iosInfo.systemVersion} / model: ${iosInfo.utsname.machine}';
-    }
-  }
-
-  String get buildNumber {
-    if (packageInfo == null) return '0';
-    final asNumber = int.tryParse(packageInfo!.buildNumber);
-    if (asNumber == null) return packageInfo!.buildNumber;
-    return '${asNumber % 10000}';
+    return response;
   }
 
   @override
   void close() {
     _client.close();
-  }
-
-  Future<http.Response> _logRequest(Future<http.Response> requestFuture) {
-    final startTime = DateTime.now();
-    return requestFuture.then((response) {
-      final endTime = DateTime.now();
-      LoggingBloc().logNetworkRequest(
-        url: response.request?.url.toString() ?? '',
-        method: response.request?.method ?? '',
-        statusCode: response.statusCode,
-        startTime: startTime,
-        endTime: endTime,
-      );
-      return response;
-    });
   }
 
   @override

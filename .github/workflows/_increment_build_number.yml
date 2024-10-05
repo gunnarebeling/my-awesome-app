@@ -5,7 +5,7 @@ on:
 
 jobs:
   increment_build_number:
-    runs-on: ubuntu-latest
+    runs-on: [runs-on,runner=2cpu-linux-x64,"run-id=${{ github.run_id }}"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.5.0
