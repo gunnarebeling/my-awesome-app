@@ -29,7 +29,7 @@
 * Add or update the fastlane configurations
 * Add or update the github workflows as needed
 
-*Make sure your keystore and signing certificates make it to the build agent. (Ask Jami about this)*
+*If iOS builds are timing out, ask Jami to check that the build scripts have access to the certs*
 
 Run deployment jobs through GitHub CI/CD.
 
