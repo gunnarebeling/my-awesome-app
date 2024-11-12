@@ -39,7 +39,7 @@ Video walkthrough setting up deployments for iOS: https://drive.google.com/file/
 
 #### Android
 
-1. Add android keystore to Github Secrets and Variables.
+1. Add android keystore to Github Secrets and Variables. [Android Deployments](docs/android.md)
 
 #### iOS
 
