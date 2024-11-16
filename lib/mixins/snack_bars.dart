@@ -10,7 +10,7 @@ mixin SnackBars<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>> showErrorSnackBar(Object? error) async {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(Object? error) {
     return showSnackBar(
       error?.toString() ?? 'An unknown error occurred. Please try again later.',
       Colors.red,
