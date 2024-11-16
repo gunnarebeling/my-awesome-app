@@ -23,6 +23,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(title),
       actions: actions,
+      centerTitle: centerTitle,
     );
   }
 }
