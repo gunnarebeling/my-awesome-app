@@ -21,10 +21,6 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 1,
-      shadowColor: Colors.black,
-      surfaceTintColor: Colors.transparent,
-      centerTitle: centerTitle,
       title: Text(title),
       actions: actions,
     );
