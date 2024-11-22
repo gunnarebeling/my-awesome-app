@@ -7,7 +7,10 @@ class CriticReportButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.help_outline),
+      icon: const Icon(
+        Icons.help_outline,
+        color: Colors.black,
+      ),
       onPressed: () {
         showDialog(
           context: context,
