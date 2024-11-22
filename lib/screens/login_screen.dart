@@ -42,18 +42,17 @@ class _LoginScreenState extends BaseScreenState<LoginScreen> {
 
   @override
   Widget build(BuildContext context, [_]) {
-    final screenSize = MediaQuery.sizeOf(context);
-
     return super.build(
       context,
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CachedNetworkImage(
-            width: screenSize.width * 0.9,
-            height: screenSize.height * 0.2,
-            imageUrl: 'https://twinsunsolutions.com/assets/images/home/nashville-skyline.jpg',
-            placeholder: (_, __) => Image.asset('assets/loading.png'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: CachedNetworkImage(
+              imageUrl: 'https://twinsunsolutions.com/assets/images/home/nashville-skyline.jpg',
+              placeholder: (_, __) => Image.asset('assets/loading.png'),
+            ),
           ),
           const SizedBox(height: 16),
           const LoginForm(),
