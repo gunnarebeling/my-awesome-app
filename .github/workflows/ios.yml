@@ -48,6 +48,7 @@ jobs:
 
     - name: Set Flutter Version
       run: ./.github/workflows/set_flutter_version
+      id: set_flutter_version
 
     # - name: Initialize Flutter Project
     #   run: |
