@@ -47,8 +47,7 @@ jobs:
     #   id: find_build_number
 
     - name: Set Flutter Version
-      run: ./.github/workflows/set_flutter_version
-      id: set_flutter_version
+      uses: ./.github/workflows/set_flutter_version
 
     # - name: Initialize Flutter Project
     #   run: |
