@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v3.5.0
 
       - name: Set Flutter Version
-        run: ./.github/scripts/set_flutter_version.sh
+        uses: ./.github/workflows/set_flutter_version
 
       - name: Install Dependencies
         run: fvm flutter pub get
