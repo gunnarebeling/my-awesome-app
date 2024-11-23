@@ -4,11 +4,11 @@ on:
   workflow_call:
     inputs:
       pilot_apple_id:
-        description: 'Apple ID for the app'
+        description: "Apple ID for the app"
         required: true
         type: string
       flavor:
-        description: 'Flavor to use'
+        description: "Flavor to use"
         required: true
         type: string
 
@@ -36,24 +36,24 @@ jobs:
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3.5.0
+      - name: Checkout Code
+        uses: actions/checkout@v3.5.0
 
-    - name: Setup Dart
-      uses: dart-lang/setup-dart@v1
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
 
-    # - name: Find Build Number
-    #   uses: ./.github/workflows/find_build_number
-    #   id: find_build_number
+      - name: Find Build Number
+        uses: ./.github/workflows/find_build_number
+        id: find_build_number
 
-    - name: Set Flutter Version
-      uses: ./.github/workflows/set_flutter_version
+      - name: Set Flutter Version
+        uses: ./.github/workflows/set_flutter_version
 
-    # - name: Initialize Flutter Project
-    #   run: |
-    #     fvm flutter pub get
-    #     pod repo update
-    #     fvm flutter clean
+      - name: Initialize Flutter Project
+        run: |
+          fvm flutter pub get
+          pod repo update
+          fvm flutter clean
 
-    # - name: Deploy iOS Build
-    #   run: bin/deploy ios $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" "$BUILD_NAME_OVERRIDE"
+      - name: Deploy iOS Build
+        run: bin/deploy ios $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" "$BUILD_NAME_OVERRIDE"
