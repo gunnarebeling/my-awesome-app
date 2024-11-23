@@ -7,6 +7,7 @@ import 'package:flutter_app_base/bloc/logging_bloc.dart';
 import 'package:flutter_app_base/bloc/notification_bloc.dart';
 import 'package:flutter_app_base/firebase_options.dart';
 import 'package:flutter_app_base/screens/splash_screen.dart';
+import 'package:flutter_app_base/themes/default_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,9 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter App Base',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: defaultTheme,
       home: const SplashScreen(),
     );
   }
