@@ -42,18 +42,18 @@ jobs:
     - name: Setup Dart
       uses: dart-lang/setup-dart@v1
 
-    - name: Find Build Number
-      uses: ./.github/workflows/find_build_number
-      id: find_build_number
+    # - name: Find Build Number
+    #   uses: ./.github/workflows/find_build_number
+    #   id: find_build_number
 
     - name: Set Flutter Version
       run: ./.github/workflows/set_flutter_version
 
-    - name: Initialize Flutter Project
-      run: |
-        fvm flutter pub get
-        pod repo update
-        fvm flutter clean
+    # - name: Initialize Flutter Project
+    #   run: |
+    #     fvm flutter pub get
+    #     pod repo update
+    #     fvm flutter clean
 
-    - name: Deploy iOS Build
-      run: bin/deploy ios $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" "$BUILD_NAME_OVERRIDE"
+    # - name: Deploy iOS Build
+    #   run: bin/deploy ios $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" "$BUILD_NAME_OVERRIDE"
