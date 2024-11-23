@@ -4,21 +4,21 @@ on:
   workflow_call:
     inputs:
       supply_package_name:
-        description: 'Package name of the android app'
+        description: "Package name of the android app"
         required: true
         type: string
       flavor:
-        description: 'Flavor to use'
+        description: "Flavor to use"
         required: true
         type: string
       platform:
-        description: 'Platform to use, android or android_firebase'
+        description: "Platform to use, android or android_firebase"
         required: true
         type: string
 
 jobs:
   build:
-    runs-on: [runs-on,runner=2cpu-linux-x64,"run-id=${{ github.run_id }}"]
+    runs-on: [runs-on, runner=2cpu-linux-x64, "run-id=${{ github.run_id }}"]
     container:
       image: twinsunllc/android-flutter
     timeout-minutes: 30
@@ -43,28 +43,28 @@ jobs:
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3.5.0
+      - name: Checkout Code
+        uses: actions/checkout@v3.5.0
 
-    - name: Find Build Number
-      uses: ./.github/workflows/find_build_number
-      id: find_build_number
+      - name: Find Build Number
+        uses: ./.github/workflows/find_build_number
+        id: find_build_number
 
-    - name: Set Flutter Version
-      run: ./.github/workflows/set_flutter_version
+      - name: Set Flutter Version
+        uses: ./.github/workflows/set_flutter_version
 
-    - name: Initialize Flutter Project
-      run: |
-        fvm flutter pub get
-        fvm flutter clean
+      - name: Initialize Flutter Project
+        run: |
+          fvm flutter pub get
+          fvm flutter clean
 
-    - name: Setup Keystore Signing
-      run: |
-        echo $ANDROID_KEYSTORE | base64 -di > keystore.jks
-        echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
-        echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
-        echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
-        echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
+      - name: Setup Keystore Signing
+        run: |
+          echo $ANDROID_KEYSTORE | base64 -di > keystore.jks
+          echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
+          echo "storeFile=$(pwd)/keystore.jks" >> android/key.properties
 
-    - name: Deploy Android Build
-      run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
+      - name: Deploy Android Build
+        run: bin/deploy $PLATFORM $FLAVOR "${{ steps.find_build_number.outputs.build_number }}" $BUILD_NAME_OVERRIDE
