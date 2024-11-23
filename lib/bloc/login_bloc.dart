@@ -53,11 +53,14 @@ class LoginBloc {
 
   Future<User> login(String email, String password) {
     _log.finest('login($email)');
-    return _api.login(email, password).then((response) {
+    return _api.login(email, password).then((response) async {
+      await Future.wait([
+        ConfigBloc().addToStream(ConfigBloc.kAuthEmail, response.data!.email),
+        ConfigBloc().addToStream(ConfigBloc.kAuthToken, response.data!.authToken),
+        ConfigBloc().addToStream(ConfigBloc.kAuthId, response.data!.id),
+      ]);
+
       _userSubject.add(response.data!);
-      ConfigBloc().addToStream(ConfigBloc.kAuthEmail, response.data!.email);
-      ConfigBloc().addToStream(ConfigBloc.kAuthToken, response.data!.authToken);
-      ConfigBloc().addToStream(ConfigBloc.kAuthId, response.data!.id);
       return response.data!;
     }).catchError((err) {
       if (err is ApiResponse) {
@@ -71,9 +74,13 @@ class LoginBloc {
 
   Future<void> logout() async {
     _log.finest('logout()');
-    await ConfigBloc().addToStream(ConfigBloc.kAuthEmail, '');
-    await ConfigBloc().addToStream(ConfigBloc.kAuthToken, '');
-    await ConfigBloc().addToStream(ConfigBloc.kAuthId, '');
+
+    await Future.wait([
+      ConfigBloc().addToStream(ConfigBloc.kAuthEmail, ''),
+      ConfigBloc().addToStream(ConfigBloc.kAuthToken, ''),
+      ConfigBloc().addToStream(ConfigBloc.kAuthId, ''),
+    ]);
+
     _userSubject.add(null);
   }
 
