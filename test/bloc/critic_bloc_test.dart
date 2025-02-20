@@ -1,6 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart'; // ignore: depend_on_referenced_packages
+import 'package:firebase_core_platform_interface/test.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_app_base/bloc/critic_bloc.dart';
 import 'package:flutter_app_base/bloc/login_bloc.dart';
@@ -31,7 +31,7 @@ void main() {
     // Setup
     final criticBloc = CriticBloc();
     final mockCritic = MockCritic();
-    CriticBloc().critic = mockCritic;
+    criticBloc.critic = mockCritic;
     const description = 'Test description';
 
     // Mock the submitReport method

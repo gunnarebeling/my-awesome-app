@@ -48,7 +48,7 @@ class NotificationBloc {
     dispose();
     await _firebaseMessaging.requestPermission();
     const initializationSettingsAndroid = AndroidInitializationSettings('ic_launcher');
-    final initializationSettingsIOS = DarwinInitializationSettings(onDidReceiveLocalNotification: _handleLocalNotification);
+    final initializationSettingsIOS = const DarwinInitializationSettings();
     final initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: _onSelectNotification);

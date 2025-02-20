@@ -57,18 +57,20 @@ class LoggingBloc {
     print(message);
   }
 
-  void _logConnectivity(ConnectivityResult result) {
-    switch (result) {
-      case ConnectivityResult.mobile:
-        Logger.root.info('Network Connectivity: mobile');
-        _connectedSubject.add(true);
-      case ConnectivityResult.wifi:
-        Logger.root.info('Network Connectivity: wifi');
-        _connectedSubject.add(true);
-      case ConnectivityResult.none:
-      default:
-        Logger.root.info('Network Connectivity: none');
-        _connectedSubject.add(false);
+  void _logConnectivity(List<ConnectivityResult> results) {
+    for (ConnectivityResult result in results) {
+      switch (result) {
+        case ConnectivityResult.mobile:
+          Logger.root.info('Network Connectivity: mobile');
+          _connectedSubject.add(true);
+        case ConnectivityResult.wifi:
+          Logger.root.info('Network Connectivity: wifi');
+          _connectedSubject.add(true);
+        case ConnectivityResult.none:
+        default:
+          Logger.root.info('Network Connectivity: none');
+          _connectedSubject.add(false);
+      }
     }
   }
 

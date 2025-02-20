@@ -7,7 +7,7 @@ environment=${2:-staging}
 buildnumber=$3
 buildname=$4
 command="flutter"
-flutterVersion=$(cat .flutter-version);
+flutterVersion=$(grep '"flutter"' .fvmrc | sed -E 's/.*"flutter": *"([^"]*)".*/\1/');
 
 echo "Building $platform / $environment"
 

@@ -43,7 +43,7 @@ class DefaultFirebaseOptions {
     appId: '1:548746061485:android:71905375df6e53cd450824',
     messagingSenderId: '548746061485',
     projectId: 'holonet-api-347016',
-    storageBucket: 'holonet-api-347016.appspot.com',
+    storageBucket: 'holonet-api-347016.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -51,9 +51,10 @@ class DefaultFirebaseOptions {
     appId: '1:548746061485:ios:2238ec2c37d3a2ad450824',
     messagingSenderId: '548746061485',
     projectId: 'holonet-api-347016',
-    storageBucket: 'holonet-api-347016.appspot.com',
-    androidClientId: '548746061485-u9tg0oddt9tbpf2pdskcd2v80q8b4djk.apps.googleusercontent.com',
+    storageBucket: 'holonet-api-347016.firebasestorage.app',
+    androidClientId: '548746061485-1ol5a496vq9ukn1ju5bn3810pd1e9699.apps.googleusercontent.com',
     iosClientId: '548746061485-cq1h6c0sfgcf2m52j983c4ekbv39998i.apps.googleusercontent.com',
     iosBundleId: 'dev.twinsun.flutterAppBase',
   );
+
 }
