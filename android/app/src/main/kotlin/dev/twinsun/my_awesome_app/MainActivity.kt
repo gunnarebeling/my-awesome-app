@@ -1,4 +1,4 @@
-package dev.twinsun.flutter_app_base
+package dev.twinsun.my_awesome_app
 
 import io.flutter.embedding.android.FlutterActivity
 

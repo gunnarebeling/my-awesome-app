@@ -7,7 +7,7 @@ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 project 'Runner', {
   'Debug' => :debug,
   'Profile' => :release,
-  'Release' => :release
+  'Release' => :release,
 }
 
 def flutter_root
@@ -17,7 +17,7 @@ def flutter_root
   end
 
   File.foreach(generated_xcode_build_settings_path) do |line|
-    matches = line.match(/FLUTTER_ROOT=(.*)/)
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
     return matches[1].strip if matches
   end
   raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
@@ -31,18 +31,45 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  # Add this line to ensure Firebase is treated as a framework module
+  pod 'Firebase', :modular_headers => true
+
   flutter_install_all_ios_pods __dir__
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    
+    # For all targets - fix modular headers issue
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
-      xcconfig_path = config.base_configuration_reference.real_path
-      xcconfig = File.read(xcconfig_path)
-      xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
-      File.open(xcconfig_path, "w") { |file| file << xcconfig_mod }
+      
+      # Enable non-modular includes in framework modules for all targets
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+      
+      # Add framework module support for Firebase
+      if target.name == 'Firebase'
+        config.build_settings['DEFINES_MODULE'] = 'YES'
+      end
+      
+      # Fix header search paths
+      if !config.build_settings['HEADER_SEARCH_PATHS']
+        config.build_settings['HEADER_SEARCH_PATHS'] = '$(inherited)'
+      end
+      
+      if config.build_settings['HEADER_SEARCH_PATHS'].is_a?(String)
+        config.build_settings['HEADER_SEARCH_PATHS'] = config.build_settings['HEADER_SEARCH_PATHS'] + ' "${PODS_ROOT}/Firebase/CoreOnly/Sources"'
+      else
+        config.build_settings['HEADER_SEARCH_PATHS'] << ' "${PODS_ROOT}/Firebase/CoreOnly/Sources"'
+      end
+    end
+    
+    # Special handling for Firebase-related targets
+    if target.name.include?('Firebase') || target.name.include?('firebase_') || target.name.include?('Google')
+      target.build_configurations.each do |config|
+        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
+      end
     end
   end
 end

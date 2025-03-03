@@ -34,4 +34,4 @@ jobs:
     with:
       flavor: staging
       platform: android_firebase
-      supply_package_name: dev.twinsun.flutter_app_base.staging
+      supply_package_name: dev.twinsun.my_awesome_app.staging

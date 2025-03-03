@@ -1,4 +1,4 @@
-gitlab_project('twinsunllc/twin-sun-technology/flutter-app-base')
+gitlab_project('twinsunllc/twin-sun-technology/my-awesome-app')
 
 storage_mode('gitlab_secure_files')
 

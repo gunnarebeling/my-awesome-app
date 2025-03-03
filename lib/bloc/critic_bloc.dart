@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app_base/bloc/logging_bloc.dart';
-import 'package:flutter_app_base/bloc/login_bloc.dart';
-import 'package:flutter_app_base/model/user.dart';
+import 'package:my_awesome_app/bloc/logging_bloc.dart';
+import 'package:my_awesome_app/bloc/login_bloc.dart';
+import 'package:my_awesome_app/model/user.dart';
 import 'package:inventiv_critic_flutter/critic.dart';
 import 'package:inventiv_critic_flutter/modal/bug_report.dart';
 import 'package:logging/logging.dart';
@@ -45,7 +45,7 @@ class CriticBloc {
     } catch (e) {
       // ignore
     }
-    final report = BugReport.create(description: description, stepsToReproduce: '', userIdentifier: user?.id ?? 'anonymous');
+    final report = BugReport.create(description: description, stepsToReproduce: '', userIdentifier: user?.id.toString() ?? 'anonymous');
     report.attachments = [];
 
     // Create a temporary file

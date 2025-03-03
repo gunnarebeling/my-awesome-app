@@ -18,7 +18,7 @@ default_platform(:android)
 platform :android do
   desc 'Submit a new Beta Build to Fastlane'
   lane :staging_firebase do
-    raise 'Update your Fastfile to deploy to a different firebase app' if ENV['CI_PROJECT_NAME'] != 'flutter-app-base'
+    raise 'Update your Fastfile to deploy to a different firebase app' if ENV['CI_PROJECT_NAME'] != 'my-awesome-app'
 
     gradle(task: 'clean assembleRelease')
     firebase_app_distribution(

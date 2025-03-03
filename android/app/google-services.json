@@ -58,7 +58,7 @@
               "client_id": "548746061485-cq1h6c0sfgcf2m52j983c4ekbv39998i.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "dev.twinsun.flutterAppBase"
+                "bundle_id": "dev.twinsun.MyAwesomeApp"
               }
             }
           ]
@@ -69,7 +69,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:548746061485:android:71905375df6e53cd450824",
         "android_client_info": {
-          "package_name": "dev.twinsun.flutter_app_base"
+          "package_name": "dev.twinsun.my_awesome_app"
         }
       },
       "oauth_client": [
@@ -77,7 +77,7 @@
           "client_id": "548746061485-jok21mntr6511lpr7ose07kqnhf5jb7s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "dev.twinsun.flutter_app_base",
+            "package_name": "dev.twinsun.my_awesome_app",
             "certificate_hash": "f3c59dfc69c42bccb0fedf8c01e8d56f6c18be6c"
           }
         },
@@ -102,7 +102,7 @@
               "client_id": "548746061485-cq1h6c0sfgcf2m52j983c4ekbv39998i.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "dev.twinsun.flutterAppBase"
+                "bundle_id": "dev.twinsun.MyAwesomeApp"
               }
             }
           ]
@@ -154,7 +154,7 @@
               "client_id": "548746061485-cq1h6c0sfgcf2m52j983c4ekbv39998i.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "dev.twinsun.flutterAppBase"
+                "bundle_id": "dev.twinsun.MyAwesomeApp"
               }
             }
           ]

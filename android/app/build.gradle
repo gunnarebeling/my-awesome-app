@@ -51,7 +51,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "dev.twinsun.flutter_app_base"
+        applicationId "dev.twinsun.my_awesome_app"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode buildVersionCode()
@@ -70,7 +70,7 @@ android {
     lintOptions {
         checkReleaseBuilds false
     }
-    namespace 'dev.twinsun.flutter_app_base'
+    namespace 'dev.twinsun.my_awesome_app'
 }
 
 flutter {

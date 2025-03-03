@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_app_base/api/device_api.dart';
-import 'package:flutter_app_base/bloc/login_bloc.dart';
+import 'package:my_awesome_app/api/device_api.dart';
+import 'package:my_awesome_app/bloc/login_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logging/logging.dart';
 
@@ -46,49 +46,100 @@ class NotificationBloc {
   Future<void> initialize() async {
     _log.finest('initialize()');
     dispose();
-    await _firebaseMessaging.requestPermission();
+    
+    // Request permission with specific settings for iOS
+    await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      announcement: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+    );
+    
+    // iOS-specific APNs setup
+    if (Platform.isIOS) {
+      await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      
+      // Register for remote notifications
+      await _firebaseMessaging.getAPNSToken();
+    }
+    
     const initializationSettingsAndroid = AndroidInitializationSettings('ic_launcher');
-    final initializationSettingsIOS = const DarwinInitializationSettings();
+    final initializationSettingsIOS = const DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
     final initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: _onSelectNotification);
     _onMessageSubscription = FirebaseMessaging.onMessage.listen(_handleMessage);
-    if (!Platform.isIOS) {
-      FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-    }
+    
+    // Register background message handler for both platforms
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+    
     initTappedMessages();
 
-    final token = await _firebaseMessaging.getToken();
-    _log.info('FCM Token: $token');
+    // Get FCM token with error handling
+    String? token;
+    try {
+      token = await _firebaseMessaging.getToken();
+      _log.info('FCM Token: $token');
+    } catch (e) {
+      _log.severe('Error getting FCM token: $e');
+    }
     _loginResultStreamSubscription = LoginBloc().currentUser.listen((result) {
       Future.delayed(const Duration(seconds: 5)).then((_) => _registerDevice(token ?? ''));
     });
     try {
       await LoginBloc().fetchCurrentUser();
       await Future.delayed(const Duration(seconds: 5));
-      _registerDevice(token ?? '');
-    } catch (err) {} // ignore: empty_catches
+      await _registerDevice(token ?? '');
+    } catch (err, stackTrace) {
+      _log.warning('Error during user fetch or device registration', err, stackTrace);
+    }
   }
 
   Future<void> unregisterDevice() async {
-    return _api.unregister(await _firebaseMessaging.getToken() ?? '').then((_) {
+    try {
+      final token = await _firebaseMessaging.getToken();
+      if (token == null || token.isEmpty) {
+        _log.warning('Unregister device: No token available');
+        return;
+      }
+      
+      await _api.unregister(token);
       _log.info('Unregister device: success!');
-      return Future.value();
-    }).catchError((error, stackTrace) {
+    } catch (error, stackTrace) {
       _log.severe('Unregister device: failure!', error, stackTrace);
       return Future.error(error, stackTrace);
-    });
+    }
   }
 
   Future<void> initTappedMessages() async {
-    final initialMessage = await _firebaseMessaging.getInitialMessage();
+    try {
+      final initialMessage = await _firebaseMessaging.getInitialMessage();
 
-    if (initialMessage != null) {
-      // The app was opened from a terminated state by tapping a notification
-      _handleNotificationTap(initialMessage, isLaunching: true);
+      if (initialMessage != null) {
+        // The app was opened from a terminated state by tapping a notification
+        _handleNotificationTap(initialMessage, isLaunching: true);
+      }
+
+      _onMessageOpenedSubscription = FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
+      
+      // For iOS, fix notification handling when app is in the background
+      if (Platform.isIOS) {
+        await FirebaseMessaging.instance.getNotificationSettings();
+      }
+    } catch (e, stackTrace) {
+      _log.severe('Error initializing notification tap handling', e, stackTrace);
     }
-
-    _onMessageOpenedSubscription = FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
   }
 
   void _handleNotificationTap(RemoteMessage remoteMessage, {bool isLaunching = false}) {
@@ -129,13 +180,18 @@ class NotificationBloc {
     _log.info('_handleLocalNotification: $id, $title, $body, $payload');
   }
 
-  void _registerDevice(String token) {
-    _api.register(token).then((_) {
+  Future<void> _registerDevice(String token) async {
+    if (token.isEmpty) {
+      _log.warning('Register device: Empty token');
+      return;
+    }
+    
+    try {
+      await _api.register(token);
       _log.info('Register device: success!');
-      return Future.value();
-    }).catchError((error, stackTrace) {
+    } catch (error, stackTrace) {
       _log.severe('Register device: failure!', error, stackTrace);
-      return Future.error(error, stackTrace);
-    });
+      // Not rethrowing the error here to prevent app crashes due to registration failures
+    }
   }
 }

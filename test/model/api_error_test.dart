@@ -1,4 +1,4 @@
-import 'package:flutter_app_base/model/api_error.dart';
+import 'package:my_awesome_app/model/api_error.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

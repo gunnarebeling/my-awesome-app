@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'holonet-api-347016.firebasestorage.app',
     androidClientId: '548746061485-1ol5a496vq9ukn1ju5bn3810pd1e9699.apps.googleusercontent.com',
     iosClientId: '548746061485-cq1h6c0sfgcf2m52j983c4ekbv39998i.apps.googleusercontent.com',
-    iosBundleId: 'dev.twinsun.flutterAppBase',
+    iosBundleId: 'dev.twinsun.MyAwesomeApp',
   );
 
 }

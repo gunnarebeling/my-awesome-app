@@ -21,7 +21,7 @@ jobs:
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
       PILOT_USERNAME: admin@twinsunsolutions.com
-      PILOT_APP_IDENTIFIER: dev.twinsun.flutter-app-base
+      PILOT_APP_IDENTIFIER: dev.twinsun.my-awesome-app
       PILOT_TEAM_ID: N/A - There is no value for REPLACE_ME_PILOT_TEAM_ID
       PILOT_DEV_PORTAL_TEAM_ID: N/A - There is no value for REPLACE_ME_DEV_PORTAL_TEAM_ID
 

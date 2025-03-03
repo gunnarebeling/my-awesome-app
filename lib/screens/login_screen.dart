@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/bloc/login_bloc.dart';
-import 'package:flutter_app_base/model/user.dart';
-import 'package:flutter_app_base/screens/base_screen.dart';
-import 'package:flutter_app_base/screens/main_screen.dart';
-import 'package:flutter_app_base/widgets/login_form.dart';
+import 'package:my_awesome_app/bloc/login_bloc.dart';
+import 'package:my_awesome_app/model/user.dart';
+import 'package:my_awesome_app/screens/base_screen.dart';
+import 'package:my_awesome_app/screens/main_screen.dart';
+import 'package:my_awesome_app/widgets/login_form.dart';
 
 class LoginScreen extends BaseScreen {
   const LoginScreen({

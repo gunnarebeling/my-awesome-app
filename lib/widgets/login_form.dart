@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/bloc/login_bloc.dart';
-import 'package:flutter_app_base/model/user.dart';
+import 'package:my_awesome_app/bloc/login_bloc.dart';
+import 'package:my_awesome_app/model/user.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_app_base/model/api_error.dart';
+import 'package:my_awesome_app/model/api_error.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 

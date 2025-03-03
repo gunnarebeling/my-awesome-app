@@ -1,5 +1,5 @@
-import 'package:flutter_app_base/model/api_response.dart';
-import 'package:flutter_app_base/model/user.dart';
+import 'package:my_awesome_app/model/api_response.dart';
+import 'package:my_awesome_app/model/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 

@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/bloc/login_bloc.dart';
-import 'package:flutter_app_base/mixins/stateless_navigation.dart';
-import 'package:flutter_app_base/model/user.dart';
-import 'package:flutter_app_base/screens/base_screen.dart';
-import 'package:flutter_app_base/screens/login_screen.dart';
+import 'package:my_awesome_app/bloc/login_bloc.dart';
+import 'package:my_awesome_app/mixins/stateless_navigation.dart';
+import 'package:my_awesome_app/model/user.dart';
+import 'package:my_awesome_app/screens/base_screen.dart';
+import 'package:my_awesome_app/screens/login_screen.dart';
+import 'package:my_awesome_app/screens/view_classes_screen.dart';
 
 class MainScreen extends BaseScreen {
   const MainScreen({
     super.key,
-    super.title = 'Main Screen',
+    super.title = 'SEW NASH',
+    
   });
 
   @override
@@ -41,6 +43,23 @@ class _MainScreenState extends BaseScreenState<MainScreen> {
     });
   }
 
+  void _navigateToScreen(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ViewClassesScreen()),
+    );
+  }
+  
+  Widget _viewClasses(){
+    return ElevatedButton(
+      onPressed: _navigateToScreen,
+      child: const Text('View Classes'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color.fromRGBO(230, 129, 230, 0.992)
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, [_]) {
     return super.build(
@@ -50,7 +69,10 @@ class _MainScreenState extends BaseScreenState<MainScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(_currentUser?.email ?? 'No user'),
+            Image.asset('assets/SewNash1.png', width: 200, height: 200),
+            const SizedBox(height: 16),
+            _viewClasses(),
+            
             const _LogoutButton(),
             TextButton(
               onPressed: FirebaseCrashlytics.instance.crash,
@@ -80,8 +102,12 @@ class _LogoutButton extends StatelessWidget with StatelessNavigation {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return ElevatedButton(
       onPressed: () => _onPressed(context),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white
+      ),
       child: const Text('Logout'),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/widgets/critic_report_dialog.dart';
+import 'package:my_awesome_app/widgets/critic_report_dialog.dart';
 
 class CriticReportButton extends StatelessWidget {
   const CriticReportButton({super.key});

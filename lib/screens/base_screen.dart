@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/mixins/navigation.dart';
-import 'package:flutter_app_base/mixins/snack_bars.dart';
-import 'package:flutter_app_base/widgets/app_bars/default_app_bar.dart';
-import 'package:flutter_app_base/widgets/loading_spinner.dart';
+import 'package:my_awesome_app/mixins/navigation.dart';
+import 'package:my_awesome_app/mixins/snack_bars.dart';
+import 'package:my_awesome_app/widgets/app_bars/default_app_bar.dart';
+import 'package:my_awesome_app/widgets/loading_spinner.dart';
 
 abstract class BaseScreen extends StatefulWidget {
   final String title;
@@ -27,6 +27,7 @@ class BaseScreenState<T extends BaseScreen> extends State<T> with Navigation<T>,
   @mustCallSuper
   Widget build(BuildContext context, [Widget? child]) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 247, 175, 230),
       appBar: DefaultAppBar(
         title: widget.title,
       ),

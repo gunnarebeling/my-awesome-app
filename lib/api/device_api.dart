@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_app_base/api/api.dart';
-import 'package:flutter_app_base/model/api_response.dart';
+import 'package:my_awesome_app/api/api.dart';
+import 'package:my_awesome_app/model/api_response.dart';
 
 final class DeviceApi extends Api {
   Future<ApiResponse> register(String token) async {

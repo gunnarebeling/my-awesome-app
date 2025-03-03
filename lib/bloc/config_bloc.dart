@@ -1,4 +1,4 @@
-import 'package:flutter_app_base/repository/config_repository.dart';
+import 'package:my_awesome_app/repository/config_repository.dart';
 import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 

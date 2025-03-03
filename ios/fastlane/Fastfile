@@ -7,16 +7,16 @@ platform :ios do
     keychain_name = nil
     keychain_password = nil
     if use_custom_keychain
-      keychain_name = 'flutterAppBase'
+      keychain_name = 'MyAwesomeApp'
       keychain_password = ENV['KEYCHAIN_PASSWORD']
       create_keychain name: keychain_name, unlock: true, timeout: 0, password: keychain_password
     end
 
-    sync_code_signing(type: 'appstore', readonly: true, app_identifier: 'dev.twinsun.flutterAppBase',
+    sync_code_signing(type: 'appstore', readonly: true, app_identifier: 'dev.twinsun.MyAwesomeApp',
                       keychain_name: keychain_name, keychain_password: keychain_password)
     build_app(workspace: 'Runner.xcworkspace', scheme: 'Runner',
-              export_options: { method: 'app-store', provisioningProfiles: { 'dev.twinsun.flutterAppBase' => 'match AppStore dev.twinsun.flutterAppBase' }, signingCertificate: 'Apple Distribution: Twin Sun, LLC (6Z8YVY449D)' }, codesigning_identity: 'Apple Distribution: Twin Sun, LLC (6Z8YVY449D)', include_symbols: false)
+              export_options: { method: 'app-store', provisioningProfiles: { 'dev.twinsun.MyAwesomeApp' => 'match AppStore dev.twinsun.MyAwesomeApp' }, signingCertificate: 'Apple Distribution: Twin Sun, LLC (6Z8YVY449D)' }, codesigning_identity: 'Apple Distribution: Twin Sun, LLC (6Z8YVY449D)', include_symbols: false)
     upload_to_testflight(wait_for_uploaded_build: true, skip_waiting_for_build_processing: true,
-                         app_identifier: 'dev.twinsun.flutterAppBase', username: 'admin@twinsunsolutions.com')
+                         app_identifier: 'dev.twinsun.MyAwesomeApp', username: 'admin@twinsunsolutions.com')
   end
 end

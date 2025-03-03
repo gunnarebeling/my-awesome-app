@@ -23,7 +23,7 @@ jobs:
     with:
       flavor: production
       platform: android_firebase
-      supply_package_name: dev.twinsun.flutter-app-base
+      supply_package_name: dev.twinsun.my-awesome-app
   production_android_store:
     uses: ./.github/workflows/android.yml
     needs: test
@@ -31,4 +31,4 @@ jobs:
     with:
       flavor: production
       platform: android
-      supply_package_name: dev.twinsun.flutter-app-base
+      supply_package_name: dev.twinsun.my-awesome-app

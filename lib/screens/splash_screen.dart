@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/bloc/login_bloc.dart';
-import 'package:flutter_app_base/screens/base_screen.dart';
-import 'package:flutter_app_base/screens/login_screen.dart';
-import 'package:flutter_app_base/screens/main_screen.dart';
+import 'package:my_awesome_app/bloc/login_bloc.dart';
+import 'package:my_awesome_app/screens/base_screen.dart';
+import 'package:my_awesome_app/screens/login_screen.dart';
+import 'package:my_awesome_app/screens/main_screen.dart';
 
 class SplashScreen extends BaseScreen {
   const SplashScreen({super.key});
@@ -33,6 +33,7 @@ class _SplashScreenState extends BaseScreenState<SplashScreen> {
   Widget build(BuildContext context, [_]) {
     super.build(context);
     return const Scaffold(
+      backgroundColor: Color.fromARGB(255, 247, 175, 230),
       body: Center(
         child: Text('Splash Screen'),
       ),

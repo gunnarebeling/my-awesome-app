@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/bloc/critic_bloc.dart';
+import 'package:my_awesome_app/bloc/critic_bloc.dart';
 import 'package:logging/logging.dart';
 
 class CriticReportDialog extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_base/bloc/critic_bloc.dart';
-import 'package:flutter_app_base/widgets/critic_report_dialog.dart';
+import 'package:my_awesome_app/bloc/critic_bloc.dart';
+import 'package:my_awesome_app/widgets/critic_report_dialog.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:inventiv_critic_flutter/modal/bug_report.dart';
 import 'package:mockito/annotations.dart';
